@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+from flask import Flask
+
 #Class to use for individual projects. Takes in the poster's first/last name, the project name,
 #the project type (individual or for a class), and a brief description.
 class Project:
