@@ -7,7 +7,8 @@ import os
 #Class to use for individual projects. Takes in the poster's first/last name, the project name,
 #the project type (individual or for a class), and a brief description.
 class Project:
-    def __init__(self, posterfname, posterlname, projname, projtype, description):
+    def __init__(self, post_id, posterfname, posterlname, projname, projtype, description):
+        self.post_id = post_id
         self.posterfname = posterfname
         self.posterlname = posterlname
         self.projname = projname
@@ -22,8 +23,8 @@ class Project:
 #Class to use for individual profiles. Takes the user's id (UIN), first name, last name, persona (student or professor),
 #email, primary contact, a list of associated interests, and a list of associated projects
 class Profile:
-    def __init__(self, id, fname, lname, persona, email, prcontact, interests, projects):
-        self.id = id
+    def __init__(self, uin, fname, lname, persona, email, prcontact, interests, projects):
+        self.id = uin
         self.fname = fname
         self.lname = lname
         self.persona = persona
@@ -66,6 +67,24 @@ def do_admin_login():
 def logout():
     session['logged_in'] = False
     return home()
+
+@app.route('/about')
+def about():
+    return 'The about page'
+
+@app.route('/user/<username>')
+def show_user_profile(uin):
+    #show the user profile for that user
+    return 'User %s' % uin
+
+@app.route('/posts')
+def posts():
+    return 'The posts page'
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    #show the post with the given id
+    return 'Post %d' % post_id
 
 def __name__ == "__main__":
     app.secret_key = os.urandom(12)
