@@ -42,4 +42,6 @@ class Profile:
     #through the Profile's stored info.
     def CreateProject(projname, projtype, description):
         newProject = Project(self.fname, self.lname, projname, projtype, description)
-        
+
+if __name__ == '__main__':
+    login.run()
