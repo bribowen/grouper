@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import login
+
 #Class to use for individual projects. Takes in the poster's first/last name, the project name,
 #the project type (individual or for a class), and a brief description.
 class Project:
