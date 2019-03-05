@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from app import app
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for, session
 from app.forms import LoginForm
 import os
 
@@ -74,7 +74,7 @@ def login():
 @app.route('/logout')
 def logout():
     session['logged_in'] = False
-    return home()
+    return index()
 
 @app.route('/about')
 def about():
