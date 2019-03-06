@@ -35,17 +35,16 @@ def login():
 def signup():
     form = SignupForm()
 
-    _firstName = form.firstName.data
-    _lastName = request.form('inputLastName')
-    _persona = request.form('inputPersona')
-    _phone = request.form('inputPhone')
-    _email = request.form('inputEmail')
-    _password = request.form('inputPassword')
+    _uin = form.uin.data
+    _firstName = form.fname.data
+    _lastName = form.lname.data
+    _persona = form.persona.data
+    _phone = form.phone.data
+    _email = form.email.data
+    _password = form.password.data
 
-    if _firstName and _lastName and _persona and _phone and _email and _password:
-        return json.dumps ({'html':'<span>All fields are good!</span>'})
-    else:
-        return json.dumps({'html':'<span>Enter the required fields.</span'})
+    return render_template('login.html', title='Sign In', form=form)
+
 
 @app.route('/logout')
 def logout():
