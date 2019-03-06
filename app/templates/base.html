@@ -13,7 +13,8 @@
             <a href="{{ url_for('login') }}">Login</a>
         </div>
         <hr>
-        {% with messages = get_flashed_messages() %}
+        <!-- For info on flashed messages, see the routes.py file -->
+       {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
             {% for message in messages %}
@@ -22,6 +23,8 @@
         </ul>
         {% endif %}
         {% endwith %}
+        <!-- DO NOT DELETE THIS. It allows the other pages to use these Jinja tags
+        to declare content for the page. -->
         {% block content %}{% endblock %}
     </body>
 </html>
