@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-from app import app
-from flask import flash, redirect, render_template, url_for, session
-from app.forms import LoginForm
 import os
+from flask import flash, redirect, render_template, request, session, url_for, json
+from app import app
+from app.models import Project, Profile
+from app.forms import LoginForm, SignupForm
+
 
 @app.route('/')
 @app.route('/index')
@@ -28,6 +30,22 @@ def login():
     		form.username.data, form.remember_me.data))
     	return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+
+    _firstName = form.firstName.data
+    _lastName = request.form('inputLastName')
+    _persona = request.form('inputPersona')
+    _phone = request.form('inputPhone')
+    _email = request.form('inputEmail')
+    _password = request.form('inputPassword')
+
+    if _firstName and _lastName and _persona and _phone and _email and _password:
+        return json.dumps ({'html':'<span>All fields are good!</span>'})
+    else:
+        return json.dumps({'html':'<span>Enter the required fields.</span'})
 
 @app.route('/logout')
 def logout():

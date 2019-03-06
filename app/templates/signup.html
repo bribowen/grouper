@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <div class="jumbotron">
+        <h1>Bucket List App</h1>
+        <form action="" method="post" class="form-signin" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                <!-- I hate how long it took me to figure this out. These are referencing
+                the forms.py file.-->
+                {{ form.uin.label }}<br>
+                {{ form.uin(size=9) }}
+            </p>
+
+            <p>
+
+                {{ form.fname.label }}<br>
+                {{ form.fname(size=32) }}
+            </p>
+
+            <p>
+
+                {{ form.lname.label }}<br>
+                {{ form.lname(size=32) }}
+            </p>
+
+            <p>
+
+                {{ form.persona.label }}<br>
+                {{ form.persona(size=32) }}
+            </p>
+
+            <p>
+
+                {{ form.phone.label }}<br>
+                {{ form.phone(size=10) }}
+            </p>
+            
+            <p>
+                {{ form.email.label }}<br>
+                {{ form.email(size=32) }}
+            </p>
+
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}
+            </p>
+            
+            <p>{{ form.submit() }}</p>
+    </form>
+    </div> 
+{% endblock %}

@@ -7,24 +7,34 @@
         {% endif %}
     </head>
     <body>
-        <div>
-            Grouper:
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('login') }}">Login</a>
-        </div>
-        <hr>
-        <!-- For info on flashed messages, see the routes.py file -->
-       {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <div class="container"></div>
+            <div class="header">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation"><a href="{{ url_for('index') }}">Home</a></li>
+                        <li role="presentation"><a href="{{ url_for('login') }}">Login</a></li>
+                    </ul>
+                </nav>
+                <h3 class="text-muter">Grouper</h3>
+            </div>
+            <hr>
+            <!-- For info on flashed messages, see the routes.py file -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         {% endwith %}
         <!-- DO NOT DELETE THIS. It allows the other pages to use these Jinja tags
         to declare content for the page. -->
         {% block content %}{% endblock %}
+
+            <footer class="footer">
+                <p>&copy; Grouper 2019</p>
+            </footer>
+        </div>
     </body>
 </html>
