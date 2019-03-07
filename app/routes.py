@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os
 from flask import flash, redirect, render_template, request, session, url_for, json
+from flask_login import current_user, login_user
 from app import app
 from app.models import Project, Profile
 from app.forms import LoginForm, SignupForm
 from flaskext.mysql import MySQL
-
 mysql = MySQL()
 
 #MySQL configs
@@ -37,10 +37,11 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-    	flash('Login requested for user {}, remember_me={}'.format(
-    		form.username.data, form.remember_me.data))
+    	
     	return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
@@ -48,13 +49,25 @@ def login():
 def signup():
     form = SignupForm()
 
-    _uin = form.uin.data
-    _firstName = form.fname.data
-    _lastName = form.lname.data
-    _persona = form.persona.data
-    _phone = form.phone.data
-    _email = form.email.data
-    _password = form.password.data
+    if form.validate_on_submit():
+        _uin = form.uin.data
+        _firstName = form.fname.data
+        _lastName = form.lname.data
+        _persona = form.persona.data
+        _phone = form.phone.data
+        _email = form.email.data
+        _password = form.password.data
+
+        cursor.callproc('sp_createUser',(_uin, _firstName, _lastName, _persona,
+        _phone, _email, _password))
+
+        #committing the changes
+        data = cursor.fetchall()
+        if len(data) is 0:
+            conn.commit()
+            return json.dumps({'message':'User created successfully!'})
+        else:
+            return json.dumps({'error':str(data[0])})
 
     return render_template('login.html', title='Sign In', form=form)
 
