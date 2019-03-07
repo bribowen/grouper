@@ -4,7 +4,20 @@ from flask import flash, redirect, render_template, request, session, url_for, j
 from app import app
 from app.models import Project, Profile
 from app.forms import LoginForm, SignupForm
+from flaskext.mysql import MySQL
 
+mysql = MySQL()
+
+#MySQL configs
+app.config['MYSQL_DATABASE_USER'] = 'grouper'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'grouper'
+app.config['MYSQL_DATABASE_DB'] = 'grouper'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
+
+conn = mysql.connect()
+
+cursor = conn.cursor()
 
 @app.route('/')
 @app.route('/index')
