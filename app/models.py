@@ -1,4 +1,5 @@
-"""
+from app import db
+
 #Dim_Project
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,14 +12,14 @@ class Project(db.Model):
     	return '<Project {}'.format(self.description)
 
 #Dim_Profile
-class User(db.Model):
-    uin = db.Column(db.Integer, primary_key=True)
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     firstName = db.Column(db.String(120))
     lastName = db.Column(db.String(120))
     persona = db.Column(db.String(60))
-    phone = db.Column(db.Long)
+    phone = db.Column(db.String(60))
 
     def __repr__(self):
     	return '<User {}>'.format(self.firstName)
@@ -35,12 +36,12 @@ class Skill(db.Model):
 
 #Fact_Participation
 class Participation(db.Model):
-	project_id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
+	id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
 	role = db.Column(db.String(60))
 
 #Fact_Skill
-class UserSkills(db.Model)
+class UserSkills(db.Model):
 	id = db.Column(db.Integer, db.ForeignKey('skill.id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
 
@@ -48,8 +49,8 @@ class UserSkills(db.Model)
 class UserInterest(db.Model):
 	id = db.Column(db.Integer, db.ForeignKey('interest.id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
-"""
 
+"""
 #Class to use for individual projects. Takes in the poster's first/last name, the project name,
 #the project type (individual or for a class), and a brief description.
 class Project:
@@ -91,3 +92,4 @@ class Profile:
     #through the Profile's stored info.
     def CreateProject(projname, projtype, description):
         newProject = Project(self.fname, self.lname, projname, projtype, description)
+"""

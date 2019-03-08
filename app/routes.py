@@ -3,10 +3,9 @@ import os
 from flask import flash, redirect, render_template, request, session, url_for, json
 from flask_login import current_user, login_user
 from app import app
-from app.models import Project, Profile
 from app.forms import LoginForm, SignupForm
 from flaskext.mysql import MySQL
-mysql = MySQL()
+"""mysql = MySQL()
 
 #MySQL configs
 app.config['MYSQL_DATABASE_USER'] = 'grouper'
@@ -17,7 +16,7 @@ mysql.init_app(app)
 
 conn = mysql.connect()
 
-cursor = conn.cursor()
+cursor = conn.cursor()"""
 
 @app.route('/')
 @app.route('/index')
@@ -50,7 +49,7 @@ def signup():
     form = SignupForm()
 
     if form.validate_on_submit():
-        _uin = form.uin.data
+        """_uin = form.uin.data
         _firstName = form.fname.data
         _lastName = form.lname.data
         _persona = form.persona.data
@@ -67,7 +66,7 @@ def signup():
             conn.commit()
             return json.dumps({'message':'User created successfully!'})
         else:
-            return json.dumps({'error':str(data[0])})
+            return json.dumps({'error':str(data[0])})"""
 
     return render_template('login.html', title='Sign In', form=form)
 
