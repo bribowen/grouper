@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import os
 from flask import flash, redirect, render_template, request, session, url_for, json
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, login_manager
 from app import app
 from app.forms import LoginForm, SignupForm
-from flaskext.mysql import MySQL
+#from flaskext.mysql import MySQL
 """mysql = MySQL()
 
 #MySQL configs

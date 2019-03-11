@@ -2,27 +2,27 @@ from app import db
 
 #Dim_Project
 class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    poster = db.Column(db.Integer, index=True)
-    name = db.Column(db.String(120))
-    ptype = db.Column(db.String(120))
-    description = db.Column(db.String(500))
+    Project_ID = db.Column(db.Integer, primary_key=True)
+    Original_Poster = db.Column(db.Integer, index=True)
+    Project_Name = db.Column(db.String(120))
+    Project_Type = db.Column(db.String(120))
+    Project_Description = db.Column(db.String(500))
 
     def __repr__(self):
-    	return '<Project {}'.format(self.description)
+    	return '<Project {}'.format(self.Project_Description)
 
 #Dim_Profile
 class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password_hash = db.Column(db.String(128))
-    firstName = db.Column(db.String(120))
-    lastName = db.Column(db.String(120))
-    persona = db.Column(db.String(60))
-    phone = db.Column(db.String(60))
+    uin = db.Column(db.Integer, primary_key=True)
+    email_address = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(128))
+    First_Name = db.Column(db.String(120))
+    Last_Name = db.Column(db.String(120))
+    User_Persona_Type = db.Column(db.String(60))
+    Primary_Contact = db.Column(db.String(60))
 
     def __repr__(self):
-    	return '<User {}>'.format(self.firstName)
+    	return '<User {}>'.format(self.First_Name)
 
 #Dim_Interests
 class Interest(db.Model):
