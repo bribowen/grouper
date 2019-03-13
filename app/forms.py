@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import Profile
 
 class LoginForm(FlaskForm):
@@ -17,8 +17,7 @@ class RegistrationForm(FlaskForm):
     phone = StringField('Phone Number', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Repeat Password', validators=[DataRequired(), 
-    EqualTo('password')])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Submit')
 
     def validate_email(self, email):
@@ -30,3 +29,10 @@ class RegistrationForm(FlaskForm):
         user = Profile.query.filter_by(uin=uin.data).first()
         if user is not None:
             raise ValidationError('A profile with that UIN is already registered.')
+
+class EditProfileForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    fname = StringField('First Name', validators=[DataRequired()])
+    lname = StringField('Last Name', validators=[DataRequired()])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
+    submit = SubmitField('Submit')

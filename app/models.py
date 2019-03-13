@@ -1,11 +1,12 @@
 from app import db
 from app import login
 from flask_login import UserMixin
+from datetime import datetime
 
 #Dim_Project
 class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
-    original_poster = db.Column(db.Integer, index=True)
+    original_poster = db.Column(db.Integer, db.ForeignKey('profile.uin'), index=True)
     project_name = db.Column(db.String(120))
     project_type = db.Column(db.String(120))
     project_description = db.Column(db.String(500))
@@ -24,6 +25,8 @@ class Profile(UserMixin, db.Model):
     last_name = db.Column(db.String(120))
     user_persona_type = db.Column(db.String(60))
     primary_contact = db.Column(db.String(60))
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
     	return '<User {}>'.format(self.first_name)
@@ -45,23 +48,23 @@ class Interest(db.Model):
 #Dim_Skill
 class Skill(db.Model):
 	skill_id = db.Column(db.Integer, primary_key=True)
-	skill_Name = db.Column(db.String(60), unique=True)
+	skill_name = db.Column(db.String(60), unique=True)
 
 #Fact_Participation
 class Participation(db.Model):
-	project_id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
-	member_id = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
+	project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'), primary_key=True)
+	member_id = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
 	role = db.Column(db.String(60))
 
 #Fact_Skill
 class ProfileSkill(db.Model):
-	skill_id = db.Column(db.Integer, db.ForeignKey('skill.id'), primary_key=True)
-	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
+	skill_id = db.Column(db.Integer, db.ForeignKey('skill.skill_id'), primary_key=True)
+	uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
 
 #Fact_Interest
-class UserInterest(db.Model):
-	Interest_ID = db.Column(db.Integer, db.ForeignKey('interest.id'), primary_key=True)
-	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
+class ProfileInterest(db.Model):
+	interest_id = db.Column(db.Integer, db.ForeignKey('interest.interest_id'), primary_key=True)
+	uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
 
 @login.user_loader
 def load_user(uin):
