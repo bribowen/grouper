@@ -1,28 +1,32 @@
 from app import db
+from app import login
+from flask_login import UserMixin
 
 #Dim_Project
 class Project(db.Model):
-    Project_ID = db.Column(db.Integer, primary_key=True)
-    Original_Poster = db.Column(db.Integer, index=True)
-    Project_Name = db.Column(db.String(120))
-    Project_Type = db.Column(db.String(120))
-    Project_Description = db.Column(db.String(500))
+    project_id = db.Column(db.Integer, primary_key=True)
+    original_poster = db.Column(db.Integer, index=True)
+    project_name = db.Column(db.String(120))
+    project_type = db.Column(db.String(120))
+    project_description = db.Column(db.String(500))
 
     def __repr__(self):
-    	return '<Project {}'.format(self.Project_Description)
+    	return '<Project {}'.format(self.project_description)
+
+#u = Profile(uin='123412341', email_address='monkey@monkey.com', password='1234', first_name='lol', last_name='lol', user_persona_type='idk', primary_contact='1234123412')
 
 #Dim_Profile
-class Profile(db.Model):
+class Profile(UserMixin, db.Model):
     uin = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
-    First_Name = db.Column(db.String(120))
-    Last_Name = db.Column(db.String(120))
-    User_Persona_Type = db.Column(db.String(60))
-    Primary_Contact = db.Column(db.String(60))
+    first_name = db.Column(db.String(120))
+    last_name = db.Column(db.String(120))
+    user_persona_type = db.Column(db.String(60))
+    primary_contact = db.Column(db.String(60))
 
     def __repr__(self):
-    	return '<User {}>'.format(self.First_Name)
+    	return '<User {}>'.format(self.first_name)
     
     def set_password(self, password):
         self.password = password
@@ -30,31 +34,38 @@ class Profile(db.Model):
     def check_password(self, password):
         return self.password == password
 
+    def get_id(self):
+        return (self.uin)
+
 #Dim_Interests
 class Interest(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True)
+    interest_id = db.Column(db.Integer, primary_key=True)
+    interest_name = db.Column(db.String(120), unique=True)
 
 #Dim_Skill
 class Skill(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(60), unique=True)
+	skill_id = db.Column(db.Integer, primary_key=True)
+	skill_Name = db.Column(db.String(60), unique=True)
 
 #Fact_Participation
 class Participation(db.Model):
-	id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
+	project_id = db.Column(db.Integer, db.ForeignKey('project.id'), primary_key=True)
+	member_id = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
 	role = db.Column(db.String(60))
 
 #Fact_Skill
-class UserSkills(db.Model):
-	id = db.Column(db.Integer, db.ForeignKey('skill.id'), primary_key=True)
+class ProfileSkill(db.Model):
+	skill_id = db.Column(db.Integer, db.ForeignKey('skill.id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
 
 #Fact_Interest
 class UserInterest(db.Model):
-	id = db.Column(db.Integer, db.ForeignKey('interest.id'), primary_key=True)
+	Interest_ID = db.Column(db.Integer, db.ForeignKey('interest.id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('user.uin'), primary_key=True)
+
+@login.user_loader
+def load_user(uin):
+    return Profile.query.get(int(uin))
 
 """
 #Class to use for individual projects. Takes in the poster's first/last name, the project name,

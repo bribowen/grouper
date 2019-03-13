@@ -12,7 +12,11 @@
                 <nav>
                     <ul class="nav nav-pills pull-right">
                         <li role="presentation"><a href="{{ url_for('index') }}">Home</a></li>
+                        {% if current_user.is_anonymous %}
                         <li role="presentation"><a href="{{ url_for('login') }}">Login</a></li>
+                        {% else %}
+                        <li role="presentation"><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
                 <h3 class="text-muter">Grouper</h3>
