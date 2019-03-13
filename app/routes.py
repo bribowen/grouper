@@ -56,7 +56,7 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
-def signup():
+def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
@@ -79,10 +79,15 @@ def logout():
 def about():
     return 'The about page'
 
-@app.route('/user/<username>')
-def show_user_profile(uin):
-    #show the user profile for that user
-    return 'User %s' % uin
+@app.route('/user/<uin>')
+@login_required
+def user(uin):
+    user = Profile.query.filter_by(uin=uin).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)
 
 @app.route('/posts')
 def posts():
