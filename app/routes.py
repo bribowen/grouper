@@ -3,8 +3,8 @@ import os
 from flask import flash, request, redirect, render_template, request, session, url_for, json
 from flask_login import current_user, login_user, logout_user, login_manager, login_required
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.models import Profile
+from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
+from app.models import Profile, Project
 from werkzeug.urls import url_parse
 from datetime import datetime
 #from flaskext.mysql import MySQL
@@ -21,21 +21,20 @@ conn = mysql.connect()
 
 cursor = conn.cursor()"""
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    posts = [
-    {
-        'author': {'username': 'John'},
-        'body': 'Beautiful day in College Station!'
-    },
-    {
-        'author': {'username': 'Susan'},
-        'body': 'I smell funny!'
-    }
-    ]
-    return render_template('index.html', title='Home', posts=posts)
+    form = ProjectForm()
+    if form.validate_on_submit():
+        project = Project(original_poster=current_user.uin, project_name=form.project_name.data, project_description=form.project_description.data,
+            project_type=form.project_type.data)
+        db.session.add(project)
+        db.session.commit()
+        flash('Your project is now live!')
+        return redirect(url_for('index'))
+    projects = Project.query.all()
+    return render_template('index.html', title='Home', posts=projects)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
