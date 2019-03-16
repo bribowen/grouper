@@ -34,7 +34,7 @@ def index():
         flash('Your project is now live!')
         return redirect(url_for('index'))
     projects = Project.query.all()
-    return render_template('index.html', title='Home', posts=projects)
+    return render_template('index.html', title='Home', form=form, projects=projects)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

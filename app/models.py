@@ -13,6 +13,9 @@ class Project(db.Model):
 
     def __repr__(self):
     	return '<Project {}'.format(self.project_description)
+    
+    get_user_name():
+        return self.query(Profile).join(original_poster).first_name
 
 #u = Profile(uin='123412341', email_address='monkey@monkey.com', password='1234', first_name='lol', last_name='lol', user_persona_type='idk', primary_contact='1234123412')
 
