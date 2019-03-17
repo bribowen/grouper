@@ -7,7 +7,6 @@ from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
 from app.models import Profile, Project
 from werkzeug.urls import url_parse
 from datetime import datetime
-from flask_sqlalchemy import Pagination
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
