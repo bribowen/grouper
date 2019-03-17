@@ -3,6 +3,7 @@ from app import login
 from flask_login import UserMixin
 from datetime import datetime
 
+#p = Project(original_poster=4, project_name="fun", project_type="fun", project_description="fun")
 #Dim_Project
 class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
@@ -14,8 +15,9 @@ class Project(db.Model):
     def __repr__(self):
     	return '<Project {}'.format(self.project_description)
     
-    get_user_name():
-        return self.query(Profile).join(original_poster).first_name
+    def get_poster(self, original_poster):
+        q = db.session.query(Profile, Project).join(Project).filter(Profile.uin == original_poster)
+        return q[0][0]
 
 #u = Profile(uin='123412341', email_address='monkey@monkey.com', password='1234', first_name='lol', last_name='lol', user_persona_type='idk', primary_contact='1234123412')
 

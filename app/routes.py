@@ -7,19 +7,6 @@ from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
 from app.models import Profile, Project
 from werkzeug.urls import url_parse
 from datetime import datetime
-#from flaskext.mysql import MySQL
-"""mysql = MySQL()
-
-#MySQL configs
-app.config['MYSQL_DATABASE_USER'] = 'grouper'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'grouper'
-app.config['MYSQL_DATABASE_DB'] = 'grouper'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-mysql.init_app(app)
-
-conn = mysql.connect()
-
-cursor = conn.cursor()"""
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -34,7 +21,10 @@ def index():
         flash('Your project is now live!')
         return redirect(url_for('index'))
     projects = Project.query.all()
-    return render_template('index.html', title='Home', form=form, projects=projects)
+    posters = []
+    for project in projects:
+        posters.append(project.get_poster(project.original_poster))
+    return render_template('index.html', title='Home', form=form, projects=projects, posters=posters)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

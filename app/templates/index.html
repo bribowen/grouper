@@ -28,6 +28,6 @@
         <p>{{ form.submit() }}</p>
     </form>
     {% for project in projects %}
-    <p>{{ project.original_poster.first_name }} says: <b>{{ project.project_description }}</b></p>
+    <p>{{ project.get_poster(project.original_poster).first_name }} {{ project.get_poster(project.original_poster).last_name }} says: <b>{{ project.project_description }}</b></p>
     {% endfor %}
 {% endblock %}
