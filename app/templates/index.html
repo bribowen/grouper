@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.first_name }}!</h1>
+    {%  if form %}
     <form action="" action="post">
         {{ form.hidden_tag() }}
         <p>
@@ -27,6 +28,7 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+    {% endif %}
     {% for project in projects %}
     <p>{{ project.get_poster(project.original_poster).first_name }} {{ project.get_poster(project.original_poster).last_name }} says: <b>{{ project.project_description }}</b></p>
     {% endfor %}
