@@ -70,20 +70,8 @@ def about():
 @login_required
 def user(uin):
     user = Profile.query.filter_by(uin=uin).first_or_404()
-    projects = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    projects = Project.query.filter_by(original_poster=user.uin)
     return render_template('user.html', user=user, projects=projects)
-
-@app.route('/posts')
-def posts():
-    return 'The posts page'
-
-@app.route('/posts/<int:post_id>')
-def show_post(post_id):
-    #show the post with the given id
-    return 'Post %d' % post_id
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
