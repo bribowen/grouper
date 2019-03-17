@@ -7,6 +7,11 @@ from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
 from app.models import Profile, Project
 from werkzeug.urls import url_parse
 from datetime import datetime
+import MySQLdb
+
+def get_cursor():
+    connection = MySQLdb.connect(host="localhost", user="grouper", passwd="Grouper!1", db="grouper")
+    return connection.cursor()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -111,11 +116,6 @@ def edit_profile():
         form.lname.data = current_user.last_name
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
-
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    if request.method == "POST":
-        
 
 @app.before_request
 def before_request():
