@@ -11,6 +11,7 @@ class Project(db.Model):
     project_name = db.Column(db.String(120))
     project_type = db.Column(db.String(120))
     project_description = db.Column(db.String(500))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
     	return '<Project {}'.format(self.project_description)
