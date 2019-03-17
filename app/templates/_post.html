@@ -1,5 +1,8 @@
 <table>
     <tr valign="top">
-        <td>{{ post.author.first_name }} says:<br>{{ post.body }}</td>
+        <td>
+            <a href="{{ url_for('user', uin=project.original_poster) }}"> Donkey</a>
+            says:<br>Funny stuff
+        </td>
     </tr>
 </table>

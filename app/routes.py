@@ -70,11 +70,11 @@ def about():
 @login_required
 def user(uin):
     user = Profile.query.filter_by(uin=uin).first_or_404()
-    posts = [
+    projects = [
         {'author': user, 'body': 'Test post #1'},
         {'author': user, 'body': 'Test post #2'}
     ]
-    return render_template('user.html', user=user, posts=posts)
+    return render_template('user.html', user=user, projects=projects)
 
 @app.route('/posts')
 def posts():
