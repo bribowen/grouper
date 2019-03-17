@@ -21,10 +21,7 @@ def index():
         flash('Your project is now live!')
         return redirect(url_for('index'))
     projects = Project.query.all()
-    posters = []
-    for project in projects:
-        posters.append(project.get_poster(project.original_poster))
-    return render_template('index.html', title='Home', form=form, projects=projects, posters=posters)
+    return render_template('index.html', title='Home', form=form, projects=projects)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -111,6 +108,7 @@ def edit_profile():
 @login_required
 def explore():
     projects = Project.query.order_by(Project.timestamp.desc()).all()
+    return render_template('index.html', title='Explore', projects=projects)
 
 @app.before_request
 def before_request():
