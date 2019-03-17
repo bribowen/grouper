@@ -7,6 +7,7 @@ from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
 from app.models import Profile, Project
 from werkzeug.urls import url_parse
 from datetime import datetime
+from flask_sqlalchemy import Pagination
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -20,8 +21,18 @@ def index():
         db.session.commit()
         flash('Your project is now live!')
         return redirect(url_for('index'))
-    projects = Project.query.all()
-    return render_template('index.html', title='Home', form=form, projects=projects)
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    return render_template('index.html', title='Home', form=form, projects=projects.items)
+
+@app.route('/explore')
+@login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.order_by(Project.timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    return render_template('index.html', title='Explore', projects=projects.items)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -91,12 +102,6 @@ def edit_profile():
         form.lname.data = current_user.last_name
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
-
-@app.route('/explore')
-@login_required
-def explore():
-    projects = Project.query.order_by(Project.timestamp.desc()).all()
-    return render_template('index.html', title='Explore', projects=projects)
 
 @app.before_request
 def before_request():
