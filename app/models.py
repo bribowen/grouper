@@ -2,12 +2,10 @@ from app import db
 from app import login
 from flask_login import UserMixin
 from datetime import datetime
-from sqlalchemy_fulltext import FullText, FullTextSearch
 
 #p = Project(original_poster=4, project_name="fun", project_type="fun", project_description="fun")
 #Dim_Project
 class Project(FullText, db.Model):
-    __fulltext_columns__ = ('project_description')
     project_id = db.Column(db.Integer, primary_key=True)
     original_poster = db.Column(db.Integer, db.ForeignKey('profile.uin'), index=True)
     project_name = db.Column(db.String(120))
@@ -26,7 +24,6 @@ class Project(FullText, db.Model):
 
 #Dim_Profile
 class Profile(FullText, UserMixin, db.Model):
-    __fulltext_columns__ = ('first_name', 'last_name')
     uin = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
