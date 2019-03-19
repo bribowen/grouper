@@ -5,7 +5,7 @@ from datetime import datetime
 
 #p = Project(original_poster=4, project_name="fun", project_type="fun", project_description="fun")
 #Dim_Project
-class Project(FullText, db.Model):
+class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
     original_poster = db.Column(db.Integer, db.ForeignKey('profile.uin'), index=True)
     project_name = db.Column(db.String(120))
@@ -23,7 +23,7 @@ class Project(FullText, db.Model):
 #u = Profile(uin='123412341', email_address='monkey@monkey.com', password='1234', first_name='lol', last_name='lol', user_persona_type='idk', primary_contact='1234123412')
 
 #Dim_Profile
-class Profile(FullText, UserMixin, db.Model):
+class Profile(UserMixin, db.Model):
     uin = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
