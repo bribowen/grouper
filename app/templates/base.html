@@ -1,0 +1,45 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+        <title>Grouper</title>
+        {% endif %}
+    </head>
+    <body>
+        <div class="header">
+            <nav>
+                    Grouper 
+                    <a href="{{ url_for('index') }}">Home</a>
+                    {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    {% else %}
+                    <a href="{{ url_for ('user', uin=current_user.uin) }}">Profile</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="{{ url_for('explore') }}">Explore</a>
+                    {% endif %}
+                </ul>
+            </nav>
+            <h3 class="text-muter">Grouper</h3>
+        </div>
+        <hr>
+        <!-- For info on flashed messages, see the routes.py file -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- DO NOT DELETE THIS. It allows the other pages to use these Jinja tags
+        to declare content for the page. -->
+        {% block content %}{% endblock %}
+
+            <footer class="footer">
+                <p>&copy; Grouper 2019</p>
+            </footer>
+        </div>
+    </body>
+</html>
