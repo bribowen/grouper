@@ -26,7 +26,7 @@ def index():
         flash('Your project is now live!')
         return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
-    projects = Project.query.paginate(
+    projects = Project.query.order_by(Project.timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('index', page=projects.next_num) if projects.has_next else None
     prev_url = url_for('index', page=projects.prev_num) if projects.has_prev else None
@@ -57,7 +57,6 @@ def login():
         login_user(user, remember=form.remember_me.data)
         #TODO: figure out next_page issue
         """next_page = request.args.get('next')
-        print(str(next_page))
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')"""
         return redirect(url_for('index'))
