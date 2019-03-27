@@ -26,6 +26,31 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.persona.label }}<br>
+            {{ form.persona }}<br>
+            {% for error in form.persona.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p><br>
+
+        <p>Interests:</p>
+        <p>{{ form.marketing() }} {{ form.marketing.label }}</p>
+        <p>{{ form.art() }} {{ form.art.label }}</p>
+        <p>{{ form.tech() }} {{ form.tech.label }}</p>
+        <p>{{ form.event() }} {{ form.event.label }}</p>
+        <p>{{ form.finance() }} {{ form.finance.label }}</p>
+        <p>{{ form.healthcare() }} {{ form.healthcare.label }}</p>
+        <p>{{ form.science() }} {{ form.science.label }}</p>
+        <p>{{ form.affairs() }} {{ form.affairs.label }}</p><br>
+
+        <p>Skills:</p>
+        <p>{{ form.app() }} {{ form.app.label }}</p>
+        <p>{{ form.datan() }} {{ form.datan.label }}</p>
+        <p>{{ form.database() }} {{ form.database.label }}</p>
+        <p>{{ form.document() }} {{ form.document.label }}</p>
+        <p>{{ form.presentation() }} {{ form.presentation.label }}</p>
+        <p>{{ form.web() }} {{ form.web.label }}</p><br>
+        <p>
             {{ form.about_me.label }}<br>
             {{ form.about_me(size=50) }}<br>
             {% for error in form.about_me.errors %}

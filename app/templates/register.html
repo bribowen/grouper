@@ -27,9 +27,11 @@
         </p>
 
         <p>
-
             {{ form.persona.label }}<br>
-            {{ form.persona(size=32) }}
+            {{ form.persona }}<br>
+            {% for error in form.persona.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
 
         <p>

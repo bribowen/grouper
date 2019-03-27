@@ -106,6 +106,7 @@ def edit_profile():
         current_user.email_address = form.email.data
         current_user.first_name = form.fname.data
         current_user.last_name = form.lname.data
+        current_user.user_persona_type = form.persona.data
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Your changes have been saved.')
