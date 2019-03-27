@@ -4,7 +4,7 @@ from flask import flash, request, redirect, render_template, request, session, u
 from flask_login import current_user, login_user, logout_user, login_manager, login_required
 from app import app, db
 from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
-from app.models import Profile, Project
+from app.models import Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest
 from werkzeug.urls import url_parse
 from datetime import datetime
 import MySQLdb
@@ -108,6 +108,79 @@ def edit_profile():
         current_user.last_name = form.lname.data
         current_user.user_persona_type = form.persona.data
         current_user.about_me = form.about_me.data
+        #Checking on interests
+        if form.marketing.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.art.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.tech.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.event.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.finance.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.healthcare.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.science.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+        if form.affairs.data:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
+                    uin=current_user.uin)
+                db.session.add(interest)
+
+        #Checking on skills
+        if form.app.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id,
+                    uin=current_user.uin)
+                db.session.add(skill)
+        if form.datan.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, 
+                    uin=current_user.uin)
+                db.session.add(skill)
+        if form.database.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, 
+                    uin=current_user.uin)
+                db.session.add(skill)
+        if form.document.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, 
+                    uin=current_user.uin)
+                db.session.add(skill)
+        if form.presentation.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, 
+                    uin=current_user.uin)
+                db.session.add(skill)
+        if form.web.data:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, 
+                    uin=current_user.uin)
+                db.session.add(skill)
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('edit_profile'))
