@@ -40,6 +40,5 @@ class EditProfileForm(FlaskForm):
 class ProjectForm(FlaskForm):
     project_name = StringField('Project Name', validators=[DataRequired()])
     project_type = StringField('Project Type', validators=[DataRequired()])
-    project_description = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
+    project_description = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')

@@ -18,9 +18,10 @@ def get_cursor():
 @login_required
 def index():
     form = ProjectForm()
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         project = Project(original_poster=current_user.uin, project_name=form.project_name.data, project_description=form.project_description.data,
-            project_type=form.project_type.data)
+            project_type=form.project_type.data, timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        #print(project.project_name)
         db.session.add(project)
         db.session.commit()
         flash('Your project is now live!')
