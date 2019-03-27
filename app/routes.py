@@ -75,12 +75,12 @@ def register():
         db.session.add(user)
         
         #Checking on interests
-        interests = check_interest(form)
+        interests = submit_interest(form)
         for interest in interests:
             db.session.add(interest)
 
         #Checking on skills
-        skills = check_skill(form)
+        skills = submit_skill(form)
         for skill in skills:
             db.session.add(skill)
         
@@ -120,22 +120,26 @@ def edit_profile():
         current_user.user_persona_type = form.persona.data
         current_user.about_me = form.about_me.data
         #Checking on interests
-        interests = check_interest(form)
+        interests = submit_interest(form)
         for interest in interests:
             db.session.add(interest)
 
         #Checking on skills
-        skills = check_skill(form)
+        skills = submit_skill(form)
         for skill in skills:
             db.session.add(skill)
             
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('user', uin=current_user.uin))
+    
     elif request.method == 'GET':
+        form = get_skills(form)
+        form = get_interests(form)
         form.email.data = current_user.email_address
         form.fname.data = current_user.first_name
         form.lname.data = current_user.last_name
+        form.persona.data = current_user.user_persona_type
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
@@ -145,7 +149,7 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-def check_interest(form):
+def submit_interest(form):
     interests = []
 
     if form.marketing.data:
@@ -191,7 +195,7 @@ def check_interest(form):
     
     return interests
 
-def check_skill(form):
+def submit_skill(form):
     skills = []
 
     if form.app.data:
@@ -225,3 +229,52 @@ def check_skill(form):
                 uin=current_user.uin)
             skills.append(skill)
     return skills
+
+def get_skills(form):
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.app.data = True
+
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.datan.data = True
+
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.database.data = True
+
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.document.data = True
+
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.presentation.data = True
+
+    if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() > 0):
+        form.web.data = True
+    
+    return form
+
+def get_interests(form):
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.marketing.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.art.data = True
+    
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.tech.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.event.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.finance.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.healthcare.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.science.data = True
+
+    if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() > 0):
+        form.affairs.data = True
+
+    return form
