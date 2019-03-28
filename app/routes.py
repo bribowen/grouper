@@ -167,8 +167,8 @@ def submit_interest(form):
             interests.append(interest)
     elif not form.marketing.data:
         if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing"[0].interest_id), uin=current_user.uin)
-            rem_interests.append(interest).first()
+            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).first()
+            rem_interests.append(interest)
     if form.art.data:
         if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() == 0):
             interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
