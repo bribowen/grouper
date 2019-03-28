@@ -71,8 +71,13 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ProjectForm(FlaskForm):
+    choices=[('Application Development', 'Application Development'),
+    ('Online Retail', 'Online Retail'),
+    ('Database Management', 'Database Management'),
+    ('Machine Learning', 'Machine Learning')]
+
     project_name = StringField('Project Name', validators=[DataRequired()])
-    project_type = StringField('Project Type', validators=[DataRequired()])
+    project_type = SelectField('Project Type', choices=choices, validators=[DataRequired()])
     project_description = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
 
