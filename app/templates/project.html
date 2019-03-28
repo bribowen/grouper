@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> {{ project.project_name }} </h1>
+    <p> {{ project.project_description }} </p><br>
+    <p>Members:</p>
+    {% for member in members %}
+        <p>{{ member.first_name }} {{ member.last_name }}</p>
+    {% endfor %}
+    {% if form %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>{{ form.join() }}</p>
+    </form>
+    {% endif %}
+{% endblock %}

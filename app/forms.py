@@ -75,3 +75,6 @@ class ProjectForm(FlaskForm):
     project_type = StringField('Project Type', validators=[DataRequired()])
     project_description = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
+
+class JoinForm(FlaskForm):
+    join = SubmitField('Join')

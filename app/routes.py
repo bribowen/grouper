@@ -3,8 +3,8 @@ import os
 from flask import flash, request, redirect, render_template, request, session, url_for, json
 from flask_login import current_user, login_user, logout_user, login_manager, login_required
 from app import app, db
-from app.forms import ProjectForm, LoginForm, RegistrationForm, EditProfileForm
-from app.models import Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm
+from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest
 from werkzeug.urls import url_parse
 from datetime import datetime
 import MySQLdb
@@ -33,6 +33,29 @@ def index():
     prev_url = url_for('index', page=projects.prev_num) if projects.has_prev else None
     return render_template('index.html', title='Home', form=form, projects=projects.items, next_url=next_url,
     prev_url=prev_url)
+
+@app.route('/project/<project_id>', methods=['GET', 'POST'])
+@login_required
+def project(project_id):
+    project = Project.query.filter_by(project_id=project_id).first_or_404()
+    members = []
+    for result in Participation.query.filter_by(project_id=project.project_id):
+        member = Profile.query.filter_by(uin=result.member_id).first()
+        members.append(member)
+    form = JoinForm()
+    if form.validate_on_submit():
+        if check_number_users(project) and check_user(project, current_user):
+            participation = Participation(project_id=project.project_id, member_id=current_user.uin, role="Member")
+            db.session.add(participation)
+            db.session.commit()
+            flask("You're now on this project!")
+        elif not check_number_users(project):
+            flash('There are already 5 people on this project.')
+            return redirect(url_for('project', project_id=project.project_id))
+        elif not check_user(project, current_user):
+            flash("You're already on this project.")
+            return redirect(url_for('project', project_id=project.project_id))
+    return render_template('project.html', title='Project', form=form, members=members, project=project)
 
 @app.route('/explore')
 @login_required
@@ -156,6 +179,12 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
+def check_number_users(project):
+    return (Participation.query.filter_by(project_id=project.project_id).count() < 5)
+
+def check_user(project, user):
+    return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0)
 
 def submit_interest(form):
     interests = []
