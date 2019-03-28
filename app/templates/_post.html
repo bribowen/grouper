@@ -2,7 +2,8 @@
     <tr valign="top">
         <td>
             <a href="{{ url_for('user', uin=project.original_poster) }}"> {{ project.get_poster(project.original_poster).first_name }} </a>
-            says:<br>{{ project.project_description }}
+            says:<br>{{ project.project_description }}<br>
+            <a href="{{ url_for('project', project_id=project.project_id) }}">See More</a>
         </td>
     </tr>
 </table>

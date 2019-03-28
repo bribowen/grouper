@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import Profile
 
@@ -10,14 +10,30 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
+    persona_choices = [('Student', 'Student'), ('Faculty', 'Faculty')]
+
     uin = IntegerField('UIN', validators=[DataRequired()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    persona = StringField('Persona Type', validators=[DataRequired()])
+    persona = SelectField('Persona Type', choices=persona_choices, validators=[DataRequired()])
     phone = StringField('Phone Number', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    marketing = BooleanField('Marketing')
+    art = BooleanField('Art/Media/Communication')
+    tech = BooleanField('Emerging Technology')
+    event = BooleanField('Event Management')
+    finance = BooleanField('Finance')
+    healthcare = BooleanField('Healthcare')
+    science = BooleanField('Science')
+    affairs = BooleanField('Student Affairs')
+    app = BooleanField('App Programming')
+    datan = BooleanField('Data Analysis')
+    database = BooleanField('Database Design')
+    document = BooleanField('Documentation')
+    presentation = BooleanField('Presentation')
+    web = BooleanField('Web Development')
     submit = SubmitField('Submit')
 
     def validate_email(self, email):
@@ -31,15 +47,39 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('A profile with that UIN is already registered.')
 
 class EditProfileForm(FlaskForm):
+    choices = [('Student', 'Student'), ('Faculty', 'Faculty')]
+
     email = StringField('Email', validators=[DataRequired()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
+    persona = SelectField('Persona Type', choices=choices, validators=[DataRequired()])
+    marketing = BooleanField('Marketing')
+    art = BooleanField('Art/Media/Communication')
+    tech = BooleanField('Emerging Technology')
+    event = BooleanField('Event Management')
+    finance = BooleanField('Finance')
+    healthcare = BooleanField('Healthcare')
+    science = BooleanField('Science')
+    affairs = BooleanField('Student Affairs')
+    app = BooleanField('App Programming')
+    datan = BooleanField('Data Analysis')
+    database = BooleanField('Database Design')
+    document = BooleanField('Documentation')
+    presentation = BooleanField('Presentation')
+    web = BooleanField('Web Development')
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 
 class ProjectForm(FlaskForm):
+    choices=[('Application Development', 'Application Development'),
+    ('Online Retail', 'Online Retail'),
+    ('Database Management', 'Database Management'),
+    ('Machine Learning', 'Machine Learning')]
+
     project_name = StringField('Project Name', validators=[DataRequired()])
-    project_type = StringField('Project Type', validators=[DataRequired()])
-    project_description = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
+    project_type = SelectField('Project Type', choices=choices, validators=[DataRequired()])
+    project_description = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
+
+class JoinForm(FlaskForm):
+    join = SubmitField('Join')
