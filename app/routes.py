@@ -75,14 +75,18 @@ def register():
         db.session.add(user)
         
         #Checking on interests
-        interests = submit_interest(form)
+        interests, rem_interests = submit_interest(form)
         for interest in interests:
             db.session.add(interest)
+        for interest in rem_interests:
+            db.session.delete(interest)
 
         #Checking on skills
-        skills = submit_skill(form)
+        skills, rem_skills = submit_skill(form)
         for skill in skills:
             db.session.add(skill)
+        for skill in rem_skills:
+            db.session.delete(skill)
         
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
