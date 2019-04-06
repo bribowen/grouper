@@ -96,7 +96,7 @@ def register():
         last_name=form.lname.data, user_persona_type=form.persona.data, primary_contact=form.phone.data)
         user.set_password(form.password.data)
         db.session.add(user)
-        
+        """
         #Checking on interests
         interests, rem_interests = submit_interest(form)
         for interest in interests:
@@ -109,7 +109,7 @@ def register():
         for skill in skills:
             db.session.add(skill)
         for skill in rem_skills:
-            db.session.delete(skill)
+            db.session.delete(skill)"""
         
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
