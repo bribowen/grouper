@@ -1,27 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
+<div class="login">
+<div class="row1">
+<div class="main">
+    <h1>Welcome to Grouper!</h1>
+    <form action="" method="post" novalidate class="input">
         {{ form.hidden_tag() }}
         <p>
             <!-- I hate how long it took me to figure this out. These are referencing
             the forms.py file.-->
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}
+            {{ form.email(class="textbox", placeholder="Enter Email", size=32) }}
         </p>
 
         <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
+            {{ form.password(class="textbox", placeholder="Enter Password", size=32) }}
         </p>
 
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p id="remember_me">{{ form.remember_me(class="checkbox") }} {{ form.remember_me.label }}</p>
         
-        <p>{{ form.submit() }}</p>
+        <p>{{ form.submit(class="button") }}</p>
 
         <p>
             <a href="{{ url_for('register') }}">New user?</a>
         </p>
     </form>
+	</div>
+</div>
+</div>
 {% endblock %}

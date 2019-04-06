@@ -1,34 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="page" id="index">
+<div class="row id="login">
+<div class="side">
     <h1>Hi, {{ current_user.first_name }}!</h1>
     {%  if form %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.project_name.label }}<br>
-            {{ form.project_name(cols=32, rows=4) }}<br>
+        <p>            
+            {{ form.project_name(class="textbox", placeholder="Enter Project Name", size=32, cols=32, rows=4) }}<br>
             {% for error in form.project_name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.project_type.label }}<br>
-            {{ form.project_type(cols=32, rows=4) }}<br>
+            {{ form.project_type(class="textbox", cols=32, rows=4) }}<br>
             {% for error in form.project_type.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.project_description.label }}<br>
-            {{ form.project_description(cols=32, rows=4) }}<br>
+            {{ form.project_description(class="textbox", placeholder="Say something about your project", size=32, cols=32, rows=4) }}<br>
             {% for error in form.project_description.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p>{{ form.submit(class="button") }}</p>
     </form>
+
     {% endif %}
+</div>
+<div class="main"
     {% for project in projects %}
         {% include '_post.html' %}
     {% endfor %}
@@ -38,4 +42,8 @@
     {% if next_url %}
     <a href="{{ next_url }}">Older posts</a>
     {% endif %}
+	</div>
+	</div>
+
+	</div>
 {% endblock %}

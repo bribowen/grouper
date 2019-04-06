@@ -1,0 +1,168 @@
+* {
+	box-sizing: border-box;
+}
+body {
+  /*background-image: url('../images/login.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;*/
+}
+
+.heading{
+  
+  margin: 1.5% 1.5% 1% 0;
+  /*width: 1900px;
+  height: 1080px;*/
+  color: #F8F8FF;
+  font-family: "Comic Sans MS";
+  font-size: 1.7em;
+  float: left;
+  padding:60px;
+}
+
+/*.header {
+	width: 100%;
+	height: 15%;
+	background-color: #333627; 
+}*/
+
+.logo {
+	float: left;
+	
+}
+
+#logo {
+	float:left;
+}
+
+/*clearfix, to make float work*/
+.clearfix {
+	clear: both;
+}
+.nav{
+	display:flex;
+	background-color: #333627;
+	color: #F8F8FF;
+    font-size: 1.48em;
+	font-family: "Calibri";
+	float: left;
+}
+
+#search{
+	width: 100%;
+	height: 65%;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 8%;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+li a {
+  display: block;
+  text-align: center;
+}
+
+#promise {
+	font-size: 1.38em;
+	font-style: italic;
+}
+ 
+a:link {
+  text-decoration: none;
+  color: #F8F8FF;
+}
+
+/* visited link */
+a:visited {
+  text-decoration: none;
+  color: #F8F8FF;
+}
+
+/* mouse over link */
+a:hover {
+  color: #333627;
+  background-color: #F8F8FF;
+  text-decoration: none;
+}
+
+.imgsection {
+  width: 98%;
+  margin-left:1%;
+  margin-right: 1%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+.img{
+	float: left;
+	width: 25%;
+	transition: 0.5s;
+	padding-top: 3%;
+}
+.banner{
+	float: left;
+	width: 100%;
+	transition: 0.5s;
+}
+/*hovering over banner*/
+.banner:hover .photo{
+	opacity: 0.4;
+}
+
+.desc{
+	visibility: hidden;
+	text-align: center;
+	opacity:0;
+	transition: 0.5s;
+}
+.photo {
+	width: 95%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	transition: 0.5s;
+}
+/*hover over images*/
+.img:hover .photo{
+	transform: scale(1.08);
+	opacity: 0.4;
+}
+.img:hover .desc{
+	position: relative;
+	width: 100%;
+	visibility: visible;
+	top: 0;
+	left: 0;
+	margin: 0;
+	display: block;
+	text-align: center;
+	opacity: 1;
+	}
+
+.para {
+	width: 60%;
+	column-count: 2;
+	column-gap: 10%;
+	column-rule-color: black;
+	column-rule-style: double;
+	padding-top: 3%;
+	padding-bottom: 5%;
+	font-size: 1.48em;
+}
+/* to force the two sections into two columns*/
+#stick {
+    display: inline-block;
+    width: 100%;
+ }
+.footer{
+	padding-top: 2%;
+	height: 5%;
+	background-color: #D0D6DB;
+	text-align: center
+}

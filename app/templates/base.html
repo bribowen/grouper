@@ -1,5 +1,9 @@
 <html>
     <head>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
@@ -8,20 +12,22 @@
     </head>
     <body>
         <div class="header">
-            <nav>
-                    Grouper
-                    {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('index') }}">Home</a>
-                    <a href="{{ url_for('login') }}">Login</a>
-                    <a href="{{ url_for ('user', uin=current_user.uin) }}">Profile</a>
-                    <a href="{{ url_for('logout') }}">Logout</a>
-                    <a href="{{ url_for('explore') }}">Explore</a>
+		
+            <nav class="navbar"><a href="{{ url_for('index') }}" class="home"><div class="logo"><img src="{{ url_for('static', filename='images/blubby1.png') }}" alt="Blubby, the grouper" id="logo"/></div>
+		<div class="heading"><strong>Grouper</strong></div><div class="clearfix"></div></a>
+                    <a href="{{ url_for('index') }}" class="link">Home</a>
+                    {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}" class="link">Login</a>
+                    {% else %}
+                    <a href="{{ url_for ('user', uin=current_user.uin) }}" class="link">Profile</a>
+                    <a href="{{ url_for('logout') }}" class="link">Logout</a>
+                    <a href="{{ url_for('explore') }}" class="link">Explore</a>
                     {% endif %}
-                </ul>
+				
             </nav>
-            <h3 class="text-muter">Grouper</h3>
+            
+		
         </div>
-        <hr>
         <!-- For info on flashed messages, see the routes.py file -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -36,9 +42,8 @@
         to declare content for the page. -->
         {% block content %}{% endblock %}
 
-            <footer class="footer">
-                <p>&copy; Grouper 2019</p>
-            </footer>
-        </div>
+            <div class="footer">
+                <div class="footnote">&copy; Grouper 2019 - Team 01</div><div class="tamu"><img src="{{ url_for('static', filename='images/tamu1.png') }}" alt="Texas A&M University" id="logo"/></div>
+            </div>
     </body>
 </html>

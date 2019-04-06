@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="page" id="project">
+<div class="row">
+<div class="main">
     <h1> {{ project.project_name }} </h1>
     <p> {{ project.project_description }} </p><br>
     <p>Members:</p>
@@ -13,4 +16,7 @@
         <p>{{ form.join() }}</p>
     </form>
     {% endif %}
+	</div>
+	</div>
+	</div>
 {% endblock %}
