@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `alembic_version`;
 CREATE TABLE `alembic_version` (
   `version_num` varchar(32) NOT NULL,
   PRIMARY KEY (`version_num`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,7 @@ CREATE TABLE `interest` (
   `interest_name` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`interest_id`),
   UNIQUE KEY `interest_name` (`interest_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ CREATE TABLE `participation` (
   KEY `member_id` (`member_id`),
   CONSTRAINT `participation_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `profile` (`uin`),
   CONSTRAINT `participation_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `profile` (
   `about_me` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`uin`),
   UNIQUE KEY `email_address` (`email_address`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +136,7 @@ CREATE TABLE `profile_interest` (
   KEY `uin` (`uin`),
   CONSTRAINT `profile_interest_ibfk_1` FOREIGN KEY (`interest_id`) REFERENCES `interest` (`interest_id`),
   CONSTRAINT `profile_interest_ibfk_2` FOREIGN KEY (`uin`) REFERENCES `profile` (`uin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +163,7 @@ CREATE TABLE `profile_skill` (
   KEY `uin` (`uin`),
   CONSTRAINT `profile_skill_ibfk_1` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`),
   CONSTRAINT `profile_skill_ibfk_2` FOREIGN KEY (`uin`) REFERENCES `profile` (`uin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +194,7 @@ CREATE TABLE `project` (
   KEY `ix_project_original_poster` (`original_poster`),
   KEY `ix_project_timestamp` (`timestamp`),
   CONSTRAINT `project_ibfk_1` FOREIGN KEY (`original_poster`) REFERENCES `profile` (`uin`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +219,7 @@ CREATE TABLE `skill` (
   `skill_name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`skill_id`),
   UNIQUE KEY `skill_name` (`skill_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
