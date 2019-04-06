@@ -1,85 +1,80 @@
 {% extends "base.html" %}
 
-{% block content %} 
-    <h1>Register</h1>
+{% block content %}
+<div class="row">
+<div class="main">
+    <h1>So glad you decided to join!</h1>
     <form action="" method="post" class="form-signin">
         {{ form.hidden_tag() }}
         <p>
             <!-- I hate how long it took me to figure this out. These are referencing
             the forms.py file.-->
-            {{ form.uin.label }}<br>
-            {{ form.uin(size=9) }}
+            {{ form.uin(class="textbox", placeholder="Enter UIN", size=9) }}
             {% for error in form.uin.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
 
         <p>
-
-            {{ form.fname.label }}<br>
-            {{ form.fname(size=32) }}
+            {{ form.fname(class="textbox", placeholder="First Name", size=32) }}
         </p>
 
         <p>
 
-            {{ form.lname.label }}<br>
-            {{ form.lname(size=32) }}
+            {{ form.lname(class="textbox", placeholder="Last Name", size=32) }}
         </p>
 
         <p>
-            {{ form.persona.label }}<br>
-            {{ form.persona }}<br>
+            {{ form.persona(class="textbox", placeholder="Student/Instructor") }}<br>
             {% for error in form.persona.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
 
         <p>
-
-            {{ form.phone.label }}<br>
-            {{ form.phone(size=10) }}
+            {{ form.phone(class="textbox", placeholder="Enter Phone Number", size=10) }}
         </p>
         
         <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}
+            {{ form.email(class="textbox", placeholder="Enter Email", size=32) }}
             {% for error in form.email.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
 
         <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
+            {{ form.password(class="textbox", placeholder="Enter Password", size=32) }}
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
 
         <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=50) }}
+            {{ form.password2(class="textbox", placeholder="Confirm Password", size=50) }}
             {% for error in form.password2.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p><br>
-        <p>Interests:</p>
-        <p>{{ form.marketing() }} {{ form.marketing.label }}</p>
-        <p>{{ form.art() }} {{ form.art.label }}</p>
-        <p>{{ form.tech() }} {{ form.tech.label }}</p>
-        <p>{{ form.event() }} {{ form.event.label }}</p>
-        <p>{{ form.finance() }} {{ form.finance.label }}</p>
-        <p>{{ form.healthcare() }} {{ form.healthcare.label }}</p>
-        <p>{{ form.science() }} {{ form.science.label }}</p>
-        <p>{{ form.affairs() }} {{ form.affairs.label }}</p><br>
-
-        <p>Skills:</p>
-        <p>{{ form.app() }} {{ form.app.label }}</p>
-        <p>{{ form.datan() }} {{ form.datan.label }}</p>
-        <p>{{ form.database() }} {{ form.database.label }}</p>
-        <p>{{ form.document() }} {{ form.document.label }}</p>
-        <p>{{ form.presentation() }} {{ form.presentation.label }}</p>
-        <p>{{ form.web() }} {{ form.web.label }}</p><br>
-        <p>{{ form.submit() }}</p>
+		<div id="interest_skill">
+        Interests:<br>
+        {{ form.marketing() }} {{ form.marketing.label }}<br>
+        {{ form.art() }} {{ form.art.label }}<br>
+        {{ form.tech() }} {{ form.tech.label }}<br>
+        {{ form.event() }} {{ form.event.label }}<br>
+        {{ form.finance() }} {{ form.finance.label }}<br>
+        {{ form.healthcare() }} {{ form.healthcare.label }}<br>
+        {{ form.science() }} {{ form.science.label }}<br>
+        {{ form.affairs() }} {{ form.affairs.label }}<br>
+        Skills:<br>
+        {{ form.app() }} {{ form.app.label }}<br>
+        {{ form.datan() }} {{ form.datan.label }}<br>
+        {{ form.database() }} {{ form.database.label }}<br>
+        {{ form.document() }} {{ form.document.label }}<br>
+        {{ form.presentation() }} {{ form.presentation.label }}
+        {{ form.web() }} {{ form.web.label }}<br>
+        <p>{{ form.submit(class="button") }}</p>
+		</div>
     </form>
+	</div>
+	</div>
 {% endblock %}

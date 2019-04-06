@@ -70,7 +70,7 @@ body {
 .row {  
   width: 70%;
   display: flex;
-  margin: 250px 0 80px;
+  margin: 250px auto 80px;
   border-radius: 25px;
   flex-wrap: wrap;
   text-align:center;
@@ -141,6 +141,10 @@ body {
 }
 #remember_me{
 	font-size: 0.5em;
+}
+#interest_skill{
+	text-align: left !important;
+	
 }
 /* Footer */
 .footer {
