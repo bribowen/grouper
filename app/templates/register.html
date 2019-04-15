@@ -7,8 +7,6 @@
     <form action="" method="post" class="form-signin">
         {{ form.hidden_tag() }}
         <p>
-            <!-- I hate how long it took me to figure this out. These are referencing
-            the forms.py file.-->
             {{ form.uin(class="textbox", placeholder="Enter UIN", size=9) }}
             {% for error in form.uin.errors %}
             <span style="color: red;">[{{ error }}]</span>

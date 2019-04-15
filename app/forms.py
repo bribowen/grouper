@@ -41,7 +41,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('A profile with that email address is already registered.')
     
-    def validat_uin(self, uin):
+    def validate_uin(self, uin):
         user = Profile.query.filter_by(uin=uin.data).first()
         if user is not None:
             raise ValidationError('A profile with that UIN is already registered.')
