@@ -96,7 +96,7 @@ def register():
         last_name=form.lname.data, user_persona_type=form.persona.data, primary_contact=form.phone.data)
         user.set_password(form.password.data)
         db.session.add(user)
-        """
+        
         #Checking on interests
         interests, rem_interests = submit_interest(form)
         for interest in interests:
@@ -109,7 +109,7 @@ def register():
         for skill in skills:
             db.session.add(skill)
         for skill in rem_skills:
-            db.session.delete(skill)"""
+            db.session.delete(skill)
         
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
@@ -190,84 +190,132 @@ def submit_interest(form):
     interests = []
     rem_interests = []
     if form.marketing.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, 
-                uin=current_user.uin)
-            interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id,
+                uin=form.uin.data)
+            interest.append(interest)
     elif not form.marketing.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.art.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.art.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Art/Media/Communication")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.tech.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.tech.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Emerging Technology")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.event.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.event.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Event Management")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.finance.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.finance.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Finance")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.healthcare.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.healthcare.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Healthcare")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     if form.science.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.science.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
-                uin=current_user.uin).first()
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
+                    uin=current_user.uin).first()
             rem_interests.append(interest)
     if form.affairs.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() == 0):
-            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() == 0):
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
+                    uin=current_user.uin)
+                interests.append(interest)
+        else:
+            interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id,
+                uin=form.uin.data)
             interests.append(interest)
     elif not form.affairs.data:
-        if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() > 0):
-            interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
-                uin=current_user.uin).first()
-            rem_interests.append(interest)
+        if current_user.is_authenticated:
+            if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() > 0):
+                interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
+                    uin=current_user.uin).first()
+                rem_interests.append(interest)
     
     return interests, rem_interests
 
@@ -276,65 +324,101 @@ def submit_skill(form):
     rem_skills = []
 
     if form.app.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() == 0):
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id,
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
             skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id,
-                uin=current_user.uin)
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.app.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     if form.datan.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() == 0):
-            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, 
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
+            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id,
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.datan.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Data Analysis")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     if form.database.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() == 0):
-            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, 
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
+            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id,
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.database.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Database Design")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     if form.document.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() == 0):
-            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, 
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
+            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id,
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.document.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Documentation")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     if form.presentation.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() == 0):
-            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, 
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
+            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id,
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.presentation.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Presentation")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     if form.web.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() == 0):
-            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, 
-                uin=current_user.uin)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() == 0):
+                skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, 
+                    uin=current_user.uin)
+                skills.append(skill)
+        else:
+            skill = ProfileSkill(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id,
+                uin=form.uin.data)
             skills.append(skill)
     elif not form.web.data:
-        if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() > 0):
-            skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, 
-                uin=current_user.uin).first()
-            rem_skills.append(skill)
+        if current_user.is_authenticated:
+            if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, uin=current_user.uin).count() > 0):
+                skill = ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="Web Development")[0].skill_id, 
+                    uin=current_user.uin).first()
+                rem_skills.append(skill)
     return skills, rem_skills
 
 def get_skills(form):
