@@ -17,8 +17,7 @@ class Project(db.Model):
     	return '<Project {}'.format(self.project_description)
     
     def get_poster(self, original_poster):
-        q = db.session.query(Profile, Project).join(Project).filter(Profile.uin == original_poster)
-        return q[0][0]
+        return Profile.query.filter_by(uin=original_poster).first_or_404()
 
 #u = Profile(uin='123412341', email_address='monkey@monkey.com', password='1234', first_name='lol', last_name='lol', user_persona_type='idk', primary_contact='1234123412')
 
@@ -72,14 +71,17 @@ class ProfileInterest(db.Model):
 	interest_id = db.Column(db.Integer, db.ForeignKey('interest.interest_id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
 
-class Request(db.Model):
+class ProjectRequest(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'), primary_key=True)
     uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
     requester_fname = db.Column(db.String(60))
     requester_lname = db.Column(db.String(60))
 
     def get_requester(uin):
-        return Profile.query.filter_by(uin=uin).first()
+        return Profile.query.filter_by(uin=uin).first_or_404()
+    
+    def get_project_owner():
+        return Profile.query.filter_by(uin=Project.query.filter_by(project_id=project_id).first().original_poster).first_or_404()
 
 @login.user_loader
 def load_user(uin):

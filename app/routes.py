@@ -3,8 +3,8 @@ import os
 from flask import flash, request, redirect, render_template, request, session, url_for, json
 from flask_login import current_user, login_user, logout_user, login_manager, login_required
 from app import app, db
-from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm
-from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm
+from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
 from werkzeug.urls import url_parse
 from datetime import datetime
 import MySQLdb
@@ -39,23 +39,67 @@ def index():
 def project(project_id):
     project = Project.query.filter_by(project_id=project_id).first_or_404()
     members = []
+    form
     for result in Participation.query.filter_by(project_id=project.project_id):
         member = Profile.query.filter_by(uin=result.member_id).first()
         members.append(member)
-    form = JoinForm()
-    if form.validate_on_submit():
-        if check_number_users(project) and check_user(project, current_user):
-            participation = Participation(project_id=project.project_id, member_id=current_user.uin, role="Member")
-            db.session.add(participation)
+    if current_user != project.get_poster(project.original_poster):
+        form = JoinForm()
+        if form.validate_on_submit():
+            if check_number_users(project) and check_user(project, current_user):
+                """participation = Participation(project_id=project.project_id, member_id=current_user.uin, role="Member")
+                db.session.add(participation)"""
+                request = Request(project_id=project.project_id, member_id=current_user.uin, requester_fname=current_user.first_name, requester_lname=current_user.last_name)
+                db.session.add(request)
+                db.session.commit()
+                flash("The project owner will be notified of your request.")
+            elif not check_number_users(project):
+                flash('There are already 5 people on this project.')
+                return redirect(url_for('project', project_id=project.project_id))
+            elif not check_user(project, current_user):
+                flash("You're already on this project.")
+                return redirect(url_for('project', project_id=project.project_id))
+    else:
+        form = RequestForm()
+        requests = get_requests(current_user, project)
+        if form.validate_on_submit():
+            if form.accept1.data and requests[0]:
+                proj_req = requests[0]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif form.deny1.data and requests[0]:
+                db.session.delete(requests[0])
+            if form.accept2.data and requests[1]:
+                proj_req = requests[1]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif form.deny1.data and requests[1]:
+                db.session.delete(requests[1])
+            if form.accept3.data and requests[2]:
+                proj_req = requests[2]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif form.deny1.data and requests[2]:
+                db.session.delete(requests[2])
+            if form.accept4.data and requests[3]:
+                proj_req = requests[3]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif form.deny1.data and requests[3]:
+                db.session.delete(requests[3])
+            if form.accept5.data and requests[4]:
+                proj_req = requests[4]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif form.deny1.data and requests[4]:
+                db.session.delete(requests[4])
             db.session.commit()
-            flask("You're now on this project!")
-        elif not check_number_users(project):
-            flash('There are already 5 people on this project.')
-            return redirect(url_for('project', project_id=project.project_id))
-        elif not check_user(project, current_user):
-            flash("You're already on this project.")
-            return redirect(url_for('project', project_id=project.project_id))
-    return render_template('project.html', title='Project', form=form, members=members, project=project)
+    return render_template('project.html', title='Project', form=form, members=members, project=project, requests=requests)
 
 @app.route('/explore')
 @login_required
@@ -184,7 +228,13 @@ def check_number_users(project):
     return (Participation.query.filter_by(project_id=project.project_id).count() < 5)
 
 def check_user(project, user):
-    return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0)
+    return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0) or (Request.query.filter_by(project_id=project_id, uin=user.uin).count() == 0)
+
+def get_requests(current_user, project):
+    requests = []
+    for item in ProjectRequest.query.filter_by(project_id=project.project_id):
+        requests.append(request)
+    return requests
 
 def submit_interest(form):
     interests = []

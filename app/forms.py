@@ -85,4 +85,16 @@ class ProjectForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class JoinForm(FlaskForm):
-    join = SubmitField('Join')
+    join = SubmitField('Request to join this project')
+
+class RequestForm(FlaskForm):
+    accept1 = BooleanField('Accept')
+    deny1 = BooleanField('Deny')
+    accept2 = BooleanField('Accept')
+    deny2 = BooleanField('Deny')
+    accept3 = BooleanField('Accept')
+    deny3 = BooleanField('Deny')
+    accept4 = BooleanField('Accept')
+    deny4 = BooleanField('Deny')
+    accept5 = BooleanField('Accept')
+    deny5 = BooleanField('Deny')

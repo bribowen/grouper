@@ -10,10 +10,35 @@
     {% for member in members %}
         <p>{{ member.first_name }} {{ member.last_name }}</p>
     {% endfor %}
-    {% if form %}
+    {% if type(form) == type(JoinForm()) %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>{{ form.join() }}</p>
+    </form>
+    {% endif %}
+    {% elif type(form) == type(RequestForm()) %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        {% if requests[0] %}
+        <p> {{ requests[0].get_requester().first_name }} {{ requests[0].get_requester().last_name }}</p><br>
+        {{ form.accept1() }} {{ form.accept1.label }} {{ form.deny1() }} {{ form.deny1.label }}<br>
+        {% endif %}
+        {% if requests[1] %}
+        <p> {{ requests[1].get_requester().first_name }} {{ requests[1].get_requester().last_name }}</p><br>
+        {{ form.accept2() }} {{ form.accept2.label }} {{ form.deny2() }} {{ form.deny2.label }}<br>
+        {% endif %}
+        {% if requests[2] %}
+        <p> {{ requests[2].get_requester().first_name }} {{ requests[2].get_requester().last_name }}</p><br>
+        {{ form.accept3() }} {{ form.accept3.label }} {{ form.deny3() }} {{ form.deny3.label }}<br>
+        {% endif %}
+        {% if requests[3] %}
+        <p> {{ requests[3].get_requester().first_name }} {{ requests[3].get_requester().last_name }}</p><br>
+        {{ form.accept4() }} {{ form.accept4.label }} {{ form.deny4() }} {{ form.deny4.label }}<br>
+        {% endif %}
+        {% if requests[4] %}
+        <p> {{ requests[4].get_requester().first_name }} {{ requests[4].get_requester().last_name }}</p><br>
+        {{ form.accept5() }} {{ form.accept5.label }} {{ form.deny5() }} {{ form.deny5.label }}<br>
+        {% endif %}
     </form>
     {% endif %}
 	</div>
