@@ -39,7 +39,7 @@ def index():
 def project(project_id):
     project = Project.query.filter_by(project_id=project_id).first_or_404()
     members = []
-    form
+    requests = []
     for result in Participation.query.filter_by(project_id=project.project_id):
         member = Profile.query.filter_by(uin=result.member_id).first()
         members.append(member)
@@ -49,8 +49,8 @@ def project(project_id):
             if check_number_users(project) and check_user(project, current_user):
                 """participation = Participation(project_id=project.project_id, member_id=current_user.uin, role="Member")
                 db.session.add(participation)"""
-                request = Request(project_id=project.project_id, member_id=current_user.uin, requester_fname=current_user.first_name, requester_lname=current_user.last_name)
-                db.session.add(request)
+                proj_request = ProjectRequest(project_id=project.project_id, uin=current_user.uin, requester_fname=current_user.first_name, requester_lname=current_user.last_name)
+                db.session.add(proj_request)
                 db.session.commit()
                 flash("The project owner will be notified of your request.")
             elif not check_number_users(project):
@@ -99,6 +99,8 @@ def project(project_id):
             elif form.deny1.data and requests[4]:
                 db.session.delete(requests[4])
             db.session.commit()
+            flash("Changes successfully made.")
+            return redirect(url_for('project', project_id=project.project_id))
     return render_template('project.html', title='Project', form=form, members=members, project=project, requests=requests)
 
 @app.route('/explore')
@@ -228,12 +230,12 @@ def check_number_users(project):
     return (Participation.query.filter_by(project_id=project.project_id).count() < 5)
 
 def check_user(project, user):
-    return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0) or (Request.query.filter_by(project_id=project_id, uin=user.uin).count() == 0)
+    return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0) or (ProjectRequest.query.filter_by(project_id=project_id, uin=user.uin).count() == 0)
 
 def get_requests(current_user, project):
     requests = []
     for item in ProjectRequest.query.filter_by(project_id=project.project_id):
-        requests.append(request)
+        requests.append(item)
     return requests
 
 def submit_interest(form):

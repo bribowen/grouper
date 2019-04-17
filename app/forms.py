@@ -98,3 +98,4 @@ class RequestForm(FlaskForm):
     deny4 = BooleanField('Deny')
     accept5 = BooleanField('Accept')
     deny5 = BooleanField('Deny')
+    submit = SubmitField('Submit')
