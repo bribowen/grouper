@@ -18,7 +18,7 @@
     {% endif %}
     {% if current_user.uin == project.original_poster %}
     <form action="" method="post">
-        {{% if requests[0] %}}
+        {% if requests[0] %}
             {{ form.hidden_tag() }}
             {% if requests[0] %}
             <p> {{ requests[0].requester_fname }} </p><br>
@@ -41,7 +41,7 @@
             {{ form.accept5() }} {{ form.accept5.label }} {{ form.deny5() }} {{ form.deny5.label }}<br>
             {% endif %}
         <p>{{ form.submit() }}</p>
-        {{% endif %}}
+        {% endif %}
     </form>
     {% endif %}
 	</div>
