@@ -9,6 +9,9 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
+class RequestForm(FlaskForm):
+    request = SubmitField('Request to join project')
+
 class RegistrationForm(FlaskForm):
     persona_choices = [('Student', 'Student'), ('Faculty', 'Faculty')]
 

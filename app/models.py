@@ -72,6 +72,15 @@ class ProfileInterest(db.Model):
 	interest_id = db.Column(db.Integer, db.ForeignKey('interest.interest_id'), primary_key=True)
 	uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
 
+class Request(db.Model):
+    project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'), primary_key=True)
+    uin = db.Column(db.Integer, db.ForeignKey('profile.uin'), primary_key=True)
+    requester_fname = db.Column(db.String(60))
+    requester_lname = db.Column(db.String(60))
+
+    def get_requester(uin):
+        return Profile.query.filter_by(uin=uin).first()
+
 @login.user_loader
 def load_user(uin):
     return Profile.query.get(int(uin))
