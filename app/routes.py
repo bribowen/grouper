@@ -27,12 +27,26 @@ def index():
         flash('Your project is now live!')
         return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
-    projects = Project.query.order_by(Project.timestamp.desc()).paginate(
-        page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('index', page=projects.next_num) if projects.has_next else None
-    prev_url = url_for('index', page=projects.prev_num) if projects.has_prev else None
-    return render_template('index.html', title='Home', form=form, projects=projects.items, next_url=next_url,
-    prev_url=prev_url)
+    projects = []
+    for project in Project.query.order_by(Project.timestamp.desc()):
+        projects.append(project)
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    for project in projects:
+        if (projects.index(project) % 4) == 0:
+            list1.append(project)
+        elif (projects.index(project) % 4) == 1:
+            list2.append(project)
+        elif (projects.index(project) % 4) == 2:
+            list3.append(project)
+        elif (projects.index(project) % 4) == 3:
+            list4.append(project)
+    """next_url = url_for('index', page=projects.next_num) if projects.has_next else None
+    prev_url = url_for('index', page=projects.prev_num) if projects.has_prev else None"""
+    return render_template('index.html', title='Home', form=form, projects=projects, list1=list1, list2=list2, list3=list3, list4=list4) 
+    #next_url=next_url, prev_url=prev_url
 
 @app.route('/project/<project_id>', methods=['GET', 'POST'])
 @login_required

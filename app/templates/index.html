@@ -31,9 +31,26 @@
     </form>
     {% endif %}
 </div>
-<div class="main"
-    {% for project in projects %}
+<div class="main">
+    {% for project in list1 %}
+    <div class="post1"> 
         {% include '_post.html' %}
+    </div>
+    {% endfor %}
+    {% for project in list2 %}
+    <div class="post2"> 
+        {% include '_post.html' %}
+    </div>
+    {% endfor %}
+    {% for project in list3 %}
+    <div class="post3"> 
+        {% include '_post.html' %}
+    </div>
+    {% endfor %}    
+    {% for project in list4 %}
+    <div class="post4"> 
+        {% include '_post.html' %}
+    </div>
     {% endfor %}
     {% if prev_url %}
     <a href="{{ prev_url }}">Newer posts</a>
