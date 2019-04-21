@@ -30,13 +30,15 @@
         <p>{{ projectform.submit(class="button") }}</p>
     </form>
     {% endif %}
-</div>
-<div class="main">
+    {% if filterform %}
     <form action="" method="post">
         {{ filterform.hidden_tag() }}
         <p>{{ filterform.project_type.label }} {{ filterform.project_type(class="textbox") }}</p>
         <p>{{ filterform.filter(class="button") }}</p>
     </form>
+    {% endif %}
+</div>
+<div class="main">
 	<div class="column"> 
     {% for project in list1 %}
     

@@ -30,7 +30,6 @@ def get_cursor():
 def index():
     # Creates a variable to store the forms used for the page. In this case, the submission would be a project, so the Project Form is rendered.
     projectform = ProjectForm()
-    filterform = FilterForm()
     # Determines whether something was submitted.
     if request.method == 'POST' and projectform.validate_on_submit():
         # Creates a Project object based on submitted data from the .html file.
@@ -51,10 +50,6 @@ def index():
     for project in Project.query.order_by(Project.timestamp.desc()):
         projects.append(project)
 
-    if filterform.validate_on_submit():
-        filter = filterform.project_type.data
-        projects = Project.query.filter_by(project_type=filter).all()
-
     # Creates a set of lists for separating the projects into four groups.
     list1 = []
     list2 = []
@@ -73,7 +68,7 @@ def index():
     # Renders the index.html page. render_template always takes a set of variables (name of the .html file
     # and a page file) along with any variables called from Jinja2 on the .html page.
     # In this case, the form, list of projects, and 4 separate lists are all passed to the page.
-    return render_template('index.html', title='Home', projectform=projectform, filterform=filterform,
+    return render_template('index.html', title='Home', projectform=projectform,
      projects=projects, list1=list1, list2=list2, list3=list3, list4=list4) 
 
 # Renders the page for an individual project. The project's ID is passed and used as the second part of the URL, allowing for
