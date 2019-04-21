@@ -1,39 +1,61 @@
 #!/usr/bin/env python
+# This file handles all the routing of the application. Also includes a few functions necessary for allowing the routing to work properly.
+
+# Importing of various libraries necessary.
 import os
+# The flask library contains several of the functions called throughout the file. Many required for basic function.
 from flask import flash, request, redirect, render_template, request, session, url_for, json
 from flask_login import current_user, login_user, logout_user, login_manager, login_required
-from app import app, db
-from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm
-from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
 from werkzeug.urls import url_parse
 from datetime import datetime
 import MySQLdb
 
+# Importing of classes from the application.
+from app import app, db
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm
+from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
+
+# Provides a cursor for use with direct database queries.
 def get_cursor():
     connection = MySQLdb.connect(host="localhost", user="grouper", passwd="Grouper!1", db="grouper")
     return connection.cursor()
 
+# @app.route tells the server what to append to the URL for the page. Allows users to browse directly via the URL and also useful
+# for easy redirecting.
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
+# Calling the login_required function ensures a user can't browse to the page without logging in.
 @login_required
+# Creates the base index page.
 def index():
+    # Creates a variable to store the form used for the page. In this case, the submission would be a project, so the Project Form is rendered.
     form = ProjectForm()
+    # Determines whether something was submitted.
     if request.method == 'POST' and form.validate_on_submit():
+        # Creates a Project object based on submitted data from the .html file.
         project = Project(original_poster=current_user.uin, project_name=form.project_name.data, project_description=form.project_description.data,
             project_type=form.project_type.data, timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-        #print(project.project_name)
+        # db.session.add() adds the object to the database session. Multiple objects for multiple tables can be added before they are commited to the
+        # database through db.session.commit()
         db.session.add(project)
         db.session.commit()
+        # Flashes a message on successful submission of the project.
         flash('Your project is now live!')
+        # Redirects the user to the index page, which in this case is the same page. Includes the flashed message.
         return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
+
+    # Creates a list for all the projects, then uses a for loop to retrieve them.
     projects = []
     for project in Project.query.order_by(Project.timestamp.desc()):
         projects.append(project)
+
+    # Creates a set of lists for separating the projects into four groups.
     list1 = []
     list2 = []
     list3 = []
     list4 = []
+    #Separates the projects equally into the 4 lists.
     for project in projects:
         if (projects.index(project) % 4) == 0:
             list1.append(project)
@@ -43,40 +65,54 @@ def index():
             list3.append(project)
         elif (projects.index(project) % 4) == 3:
             list4.append(project)
-    """next_url = url_for('index', page=projects.next_num) if projects.has_next else None
-    prev_url = url_for('index', page=projects.prev_num) if projects.has_prev else None"""
+    # Renders the index.html page. render_template always takes a set of variables (name of the .html file
+    # and a page file) along with any variables called from Jinja2 on the .html page.
+    # In this case, the form, list of projects, and 4 separate lists are all passed to the page.
     return render_template('index.html', title='Home', form=form, projects=projects, list1=list1, list2=list2, list3=list3, list4=list4) 
-    #next_url=next_url, prev_url=prev_url
 
+# Renders the page for an individual project. The project's ID is passed and used as the second part of the URL, allowing for
+# dynamic creation of web pages instead of a file being created for each individual project.
 @app.route('/project/<project_id>', methods=['GET', 'POST'])
 @login_required
+# Functions takes the project_id as a variable. Should be passed automatically through a redirect.
 def project(project_id):
+    # Grabs the project as a variable. Then creates two lists to hold the current members of the project and any requests to join the project.
     project = Project.query.filter_by(project_id=project_id).first_or_404()
     members = []
     requests = []
+    # Loop to grab all members of the project and add them to the members list.
     for result in Participation.query.filter_by(project_id=project.project_id):
         member = Profile.query.filter_by(uin=result.member_id).first()
         members.append(member)
+    
+    # Checks to see if the user viewing the project is the project owner. If not, it renders the Join form to allow the user to request to join the project.
     if current_user != project.get_poster(project.original_poster):
         form = JoinForm()
         if form.validate_on_submit():
+            # Checks to see if there is space on the project and the user isn't already listed on it.
             if check_number_users(project) and check_user(project, current_user):
-                """participation = Participation(project_id=project.project_id, member_id=current_user.uin, role="Member")
-                db.session.add(participation)"""
                 proj_request = ProjectRequest(project_id=project.project_id, uin=current_user.uin, requester_fname=current_user.first_name, requester_lname=current_user.last_name)
                 db.session.add(proj_request)
                 db.session.commit()
                 flash("The project owner will be notified of your request.")
+            # Flashes a message if there are already 5 people on the project (the maximum).
             elif not check_number_users(project):
                 flash('There are already 5 people on this project.')
                 return redirect(url_for('project', project_id=project.project_id))
+            # Flashes a message if the user is already on the project.
             elif not check_user(project, current_user):
                 flash("You're already on this project.")
                 return redirect(url_for('project', project_id=project.project_id))
+    # If the user is the project owner, it renders the Request form, allowing the user to decide whether they want to accept/deny
+    # any project join requests.
     else:
         form = RequestForm()
+        # Invokes the get_requests method to retrieve all requests for the project.
         requests = get_requests(current_user, project)
         if form.validate_on_submit():
+            # Series of conditionals that checks to see which accept/deny boxes contain data and to act appropriately.
+            # As an example, this first one will check if the accept box contained data. If so, it adds the user who created the requests
+            # to the project. Otherwise, it deletes the request.
             if form.accept1.data and requests[0]:
                 proj_req = requests[0]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
@@ -112,9 +148,12 @@ def project(project_id):
                 db.session.delete(proj_req)
             elif form.deny1.data and requests[4]:
                 db.session.delete(requests[4])
+            # With all changes made, it commits the changes to the database, flashes a message to the user, and returns a redirect to the 
+            # URL of the same project page (refreshes, essentially).
             db.session.commit()
             flash("Changes successfully made.")
             return redirect(url_for('project', project_id=project.project_id))
+    # Renders the project page with the appropriate form, list of members on the project, the project itself, and requests to join the project.
     return render_template('project.html', title='Project', form=form, members=members, project=project, requests=requests)
 
 @app.route('/explore')
