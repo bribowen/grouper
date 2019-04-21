@@ -165,13 +165,28 @@ def project(project_id):
 @app.route('/explore')
 @login_required
 def explore():
-    page = request.args.get('page', 1, type=int)
-    projects = Project.query.order_by(Project.timestamp.desc()).paginate(
-        page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('explore', page=projects.next_num) if projects.has_next else None
-    prev_url = url_for('explore', page=projects.prev_num) if projects.has_prev else None
-    return render_template('index.html', title='Explore', projects=projects.items, next_url=next_url,
-    prev_url=prev_url)
+	filterform = FilterForm()
+	page = request.args.get('page', 1, type=int)
+	projects = Project.query.order_by(Project.timestamp.desc()).all()
+	if filterform.validate_on_submit():
+		filter = filterform.project_type.data
+		projects = Project.query.filter_by(project_type=filter).all()
+    # Creates a set of lists for separating the projects into four groups.
+	list1 = []
+	list2 = []
+	list3 = []
+	list4 = []
+    # Separates the projects equally into the 4 lists.
+	for project in projects:
+		if (projects.index(project) % 4) == 0:
+			list1.append(project)
+		elif (projects.index(project) % 4) == 1:
+			list2.append(project)
+		elif (projects.index(project) % 4) == 2:
+			list3.append(project)
+		elif (projects.index(project) % 4) == 3:
+			list4.append(project)
+	return render_template('index.html', title='Explore', projects=projects, filterform=filterform, list1=list1, list2=list2, list3=list3, list4=list4)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
