@@ -12,7 +12,7 @@ import MySQLdb
 
 # Importing of classes from the application.
 from app import app, db
-from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm, FilterForm
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm, FilterForm, DeleteForm
 from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
 
 # Provides a cursor for use with direct database queries.
@@ -33,8 +33,8 @@ def index():
     # Determines whether something was submitted.
     if request.method == 'POST' and projectform.validate_on_submit():
         # Creates a Project object based on submitted data from the .html file.
-        project = Project(original_poster=current_user.uin, project_name=form.project_name.data, project_description=form.project_description.data,
-            project_type=form.project_type.data, timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        project = Project(original_poster=current_user.uin, project_name=projectform.project_name.data, project_description=projectform.project_description.data,
+            project_type=projectform.project_type.data, timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         # db.session.add() adds the object to the database session. Multiple objects for multiple tables can be added before they are commited to the
         # database through db.session.commit()
         db.session.add(project)
@@ -81,6 +81,9 @@ def project(project_id):
     project = Project.query.filter_by(project_id=project_id).first_or_404()
     members = []
     requests = []
+    joinform = JoinForm()
+    deleteform = DeleteForm()
+    requestform = RequestForm()
     # Loop to grab all members of the project and add them to the members list.
     for result in Participation.query.filter_by(project_id=project.project_id):
         member = Profile.query.filter_by(uin=result.member_id).first()
@@ -88,7 +91,7 @@ def project(project_id):
     
     # Checks to see if the user viewing the project is the project owner. If not, it renders the Join form to allow the user to request to join the project.
     if current_user != project.get_poster(project.original_poster):
-        form = JoinForm()
+        joinform = JoinForm()
         if form.validate_on_submit():
             # Checks to see if there is space on the project and the user isn't already listed on it.
             if check_number_users(project) and check_user(project, current_user):
@@ -107,55 +110,65 @@ def project(project_id):
     # If the user is the project owner, it renders the Request form, allowing the user to decide whether they want to accept/deny
     # any project join requests.
     else:
-        form = RequestForm()
+        deleteform = DeleteForm()
+        requestform = RequestForm()
         # Invokes the get_requests method to retrieve all requests for the project.
         requests = get_requests(current_user, project)
-        if form.validate_on_submit():
+        if requestform.validate_on_submit():
             # Series of conditionals that checks to see which accept/deny boxes contain data and to act appropriately.
             # As an example, this first one will check if the accept box contained data. If so, it adds the user who created the requests
             # to the project. Otherwise, it deletes the request.
-            if form.accept1.data and requests[0]:
+            if requestform.accept1.data and requests[0]:
                 proj_req = requests[0]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
                 db.session.add(participation)
                 db.session.delete(proj_req)
-            elif form.deny1.data and requests[0]:
+            elif requestform.deny1.data and requests[0]:
                 db.session.delete(requests[0])
-            if form.accept2.data and requests[1]:
+            if requestform.accept2.data and requests[1]:
                 proj_req = requests[1]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
                 db.session.add(participation)
                 db.session.delete(proj_req)
-            elif form.deny1.data and requests[1]:
+            elif requestform.deny1.data and requests[1]:
                 db.session.delete(requests[1])
-            if form.accept3.data and requests[2]:
+            if requestform.accept3.data and requests[2]:
                 proj_req = requests[2]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
                 db.session.add(participation)
                 db.session.delete(proj_req)
-            elif form.deny1.data and requests[2]:
+            elif requestform.deny1.data and requests[2]:
                 db.session.delete(requests[2])
-            if form.accept4.data and requests[3]:
+            if requestform.accept4.data and requests[3]:
                 proj_req = requests[3]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
                 db.session.add(participation)
                 db.session.delete(proj_req)
-            elif form.deny1.data and requests[3]:
+            elif requestform.deny1.data and requests[3]:
                 db.session.delete(requests[3])
-            if form.accept5.data and requests[4]:
+            if requestform.accept5.data and requests[4]:
                 proj_req = requests[4]
                 participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
                 db.session.add(participation)
                 db.session.delete(proj_req)
-            elif form.deny1.data and requests[4]:
+            elif requestform.deny1.data and requests[4]:
                 db.session.delete(requests[4])
             # With all changes made, it commits the changes to the database, flashes a message to the user, and returns a redirect to the 
-            # URL of the same project page (refreshes, essentially).
+            # URL of the same project page (refreshes, essentially
             db.session.commit()
             flash("Changes successfully made.")
             return redirect(url_for('project', project_id=project.project_id))
+        if deleteform.validate_on_submit():
+            participations = Participation.query.filter_by(project_id=project.project_id).all()
+            for participation in participations:
+                db.session.delete(participation)
+            db.session.commit()
+            db.session.delete(project)
+            db.session.commit()
+            flash("Project deleted.")
+            return redirect(url_for('index'))
     # Renders the project page with the appropriate form, list of members on the project, the project itself, and requests to join the project.
-    return render_template('project.html', title='Project', form=form, members=members, project=project, requests=requests)
+    return render_template('project.html', title='Project', requestform=requestform, joinform=joinform, deleteform=deleteform, members=members, project=project, requests=requests)
 
 @app.route('/explore', methods=['GET', 'POST'])
 @login_required
@@ -194,10 +207,6 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        #TODO: figure out next_page issue
-        """next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')"""
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
@@ -255,7 +264,7 @@ def user(uin):
     next_url = url_for('explore', page=projects.next_num) if projects.has_next else None
     prev_url = url_for('explore', page=projects.prev_num) if projects.has_prev else None
     return render_template('user.html', user=user, projects=projects.items, skills=skills,
-    interests=interests, next_url=next_url, prev_url=prev_url)
+    interests=interests, next_url=next_url, prev_url=prev_url, form=form)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

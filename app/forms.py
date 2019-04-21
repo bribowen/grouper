@@ -132,3 +132,6 @@ class FilterForm(FlaskForm):
 
     project_type = SelectField('Project Type', choices=choices)
     filter = SubmitField('Filter Projects')
+
+class DeleteForm(FlaskForm):
+    delete = SubmitField('Delete Project')
