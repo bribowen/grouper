@@ -40,6 +40,21 @@ class Profile(UserMixin, db.Model):
     def __repr__(self):
     	return '<User {}>'.format(self.first_name)
     
+    def check_uin(self, uin):
+        if Profile.query.filter_by(uin=uin):
+            return True
+        return False
+    
+    def check_uin_length(self, uin):
+        if len(uin) > 11:
+            return True
+        return False
+    
+    def check_email(self, email):
+        if Profile.query.filter_by(email=email):
+            return True
+        return False
+    
     def set_password(self, password):
         self.password = password
 

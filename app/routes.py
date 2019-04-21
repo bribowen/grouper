@@ -216,11 +216,22 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
+        if not type(form.uin.data) == int:
+            flash('UIN must be an integer.')
+            return redirect(url_for('register'))
         user = Profile(uin=form.uin.data, email_address=form.email.data, first_name=form.fname.data,
         last_name=form.lname.data, user_persona_type=form.persona.data, primary_contact=form.phone.data)
         user.set_password(form.password.data)
+        if user.check_uin(user.uin):
+            flash('There is already a user registered with that UIN.')
+            return redirect(url_for('register'))
+        elif user.check_email(user.email):
+            flash('There is already a user registered with that email.')
+            return redirect(url_for('register'))
+        if user.check_uin_length(user.uin):
+            flash('Please enter a UIN of 11 digits or less.')
+            return redirect(url_for('register'))
         db.session.add(user)
-        
         #Checking on interests
         interests, rem_interests = submit_interest(form)
         for interest in interests:
