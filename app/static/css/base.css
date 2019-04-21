@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 
-/* Styling divisions which are part of body */
+/* Styling the content of the page */
 body {
   font-family: Calibri;
   margin: 0;
@@ -12,21 +12,23 @@ body {
 /* Style the top navigation bar */
 .navbar {
   display: flex;
+/* Seting the font color */
   color: #F8F8FF;
+/* Seting the background color */
   background: #0A1200;
   overflow: hidden;
+/* Keeping the neavigation bar fixed while scrolling */
   position: fixed;
   z-index: 1000;
   top: 0;
   width: 100%;
 }
+/* Defining margins for the conainer that holds the logo and the text "Grouper" */
+/* This also defines the borders that also act as a link to the home page */
 .home {
   margin: 10px 550px 10px 70px;
 }
-.logo {
-	float: left;
-	
-}
+/* Grouper text */
 .heading {
 	float:left;
 	font-size: 3.5em;
@@ -35,6 +37,7 @@ body {
 	color: #F8F8FF;
 	text-decoration: none;
 }
+/* CLearfix for loat elements */
 .clearfix {
 	clear:both;
 }
