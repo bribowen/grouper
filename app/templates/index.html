@@ -5,33 +5,38 @@
 <div class="row" id="login">
 <div class="side">
     <h1>Hi, {{ current_user.first_name }}!</h1>
-    {%  if form %}
+    {%  if projectform %}
     <form action="" method="post">
-        {{ form.hidden_tag() }}
+        {{ projectform.hidden_tag() }}
         <p>            
-            {{ form.project_name(class="textbox", placeholder="Enter Project Name", size=32, cols=32, rows=4) }}<br>
-            {% for error in form.project_name.errors %}
+            {{ projectform.project_name(class="textbox", placeholder="Enter Project Name", size=32, cols=32, rows=4) }}<br>
+            {% for error in projectform.project_name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.project_type.label }}<br>
-            {{ form.project_type(class="textbox", cols=32, rows=4) }}<br>
-            {% for error in form.project_type.errors %}
+            {{ projectform.project_type.label }}<br>
+            {{ projectform.project_type(class="textbox", cols=32, rows=4) }}<br>
+            {% for error in projectform.project_type.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.project_description(class="textbox", placeholder="Say something about your project", size=32, cols=32, rows=4) }}<br>
-            {% for error in form.project_description.errors %}
+            {{ projectform.project_description(class="textbox", placeholder="Say something about your project", size=32, cols=32, rows=4) }}<br>
+            {% for error in projectform.project_description.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit(class="button") }}</p>
+        <p>{{ projectform.submit(class="button") }}</p>
     </form>
     {% endif %}
 </div>
 <div class="main">
+    <form action="" method="post">
+        {{ filterform.hidden_tag() }}
+        <p>{{ filterform.project_type.label }} {{ filterform.project_type(class="textbox") }}</p>
+        <p>{{ filterform.filter(class="button") }}</p>
+    </form>
 	<div class="column"> 
     {% for project in list1 %}
     

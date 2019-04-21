@@ -8,6 +8,12 @@
             {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
         </tr>
     </table>
+    {% for interest in interests %}
+    <p>{{ interest.interest_name }}</p><br>
+    {% endfor %}
+    {% for skill in skills %}
+    <p>{{ skill.skill_name }}</p><br>
+    {% endfor %}
     <hr>
     {% for project in projects %}
         {% include '_post.html' %}

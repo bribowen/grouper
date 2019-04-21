@@ -12,7 +12,7 @@ import MySQLdb
 
 # Importing of classes from the application.
 from app import app, db
-from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm, FilterForm
 from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
 
 # Provides a cursor for use with direct database queries.
@@ -28,10 +28,11 @@ def get_cursor():
 @login_required
 # Creates the base index page.
 def index():
-    # Creates a variable to store the form used for the page. In this case, the submission would be a project, so the Project Form is rendered.
-    form = ProjectForm()
+    # Creates a variable to store the forms used for the page. In this case, the submission would be a project, so the Project Form is rendered.
+    projectform = ProjectForm()
+    filterform = FilterForm()
     # Determines whether something was submitted.
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and projectform.validate_on_submit():
         # Creates a Project object based on submitted data from the .html file.
         project = Project(original_poster=current_user.uin, project_name=form.project_name.data, project_description=form.project_description.data,
             project_type=form.project_type.data, timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -50,12 +51,16 @@ def index():
     for project in Project.query.order_by(Project.timestamp.desc()):
         projects.append(project)
 
+    if filterform.validate_on_submit():
+        filter = filterform.project_type.data
+        projects = Project.query.filter_by(project_type=filter).all()
+
     # Creates a set of lists for separating the projects into four groups.
     list1 = []
     list2 = []
     list3 = []
     list4 = []
-    #Separates the projects equally into the 4 lists.
+    # Separates the projects equally into the 4 lists.
     for project in projects:
         if (projects.index(project) % 4) == 0:
             list1.append(project)
@@ -68,7 +73,8 @@ def index():
     # Renders the index.html page. render_template always takes a set of variables (name of the .html file
     # and a page file) along with any variables called from Jinja2 on the .html page.
     # In this case, the form, list of projects, and 4 separate lists are all passed to the page.
-    return render_template('index.html', title='Home', form=form, projects=projects, list1=list1, list2=list2, list3=list3, list4=list4) 
+    return render_template('index.html', title='Home', projectform=projectform, filterform=filterform,
+     projects=projects, list1=list1, list2=list2, list3=list3, list4=list4) 
 
 # Renders the page for an individual project. The project's ID is passed and used as the second part of the URL, allowing for
 # dynamic creation of web pages instead of a file being created for each individual project.
@@ -220,20 +226,26 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/about')
-def about():
-    return 'The about page'
-
 @app.route('/user/<uin>')
 @login_required
 def user(uin):
     user = Profile.query.filter_by(uin=uin).first_or_404()
+    profileskills = ProfileSkill.query.filter_by(uin=uin).all()
+    profileinterests = ProfileInterest.query.filter_by(uin=uin).all()
+    interests = []
+    skills = []
+    for result in profileinterests:
+        interest = Interest.query.filter_by(interest_id=result.interest_id).first()
+        interests.append(interest)
+    for result in profileskills:
+        skill = Skill.query.filter_by(skill_id=result.skill_id).first()
+        skills.append(skill)
     page = request.args.get('page', 1, type=int)
     projects = Project.query.filter_by(original_poster=user.uin).order_by(Project.timestamp.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('explore', page=projects.next_num) if projects.has_next else None
     prev_url = url_for('explore', page=projects.prev_num) if projects.has_prev else None
-    return render_template('user.html', user=user, projects=projects.items,
-    next_url=next_url, prev_url=prev_url)
+    return render_template('user.html', user=user, projects=projects.items, skills=skills,
+    interests=interests, next_url=next_url, prev_url=prev_url)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

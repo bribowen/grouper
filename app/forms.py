@@ -123,3 +123,12 @@ class RequestForm(FlaskForm):
     accept5 = BooleanField('Accept')
     deny5 = BooleanField('Deny')
     submit = SubmitField('Submit')
+
+class FilterForm(FlaskForm):
+    choices=[('Application Development', 'Application Development'),
+    ('Online Retail', 'Online Retail'),
+    ('Database Management', 'Database Management'),
+    ('Machine Learning', 'Machine Learning')]
+
+    project_type = SelectField('Project Type', choices=choices)
+    filter = SubmitField('Filter Projects')
