@@ -157,7 +157,7 @@ def project(project_id):
     # Renders the project page with the appropriate form, list of members on the project, the project itself, and requests to join the project.
     return render_template('project.html', title='Project', form=form, members=members, project=project, requests=requests)
 
-@app.route('/explore')
+@app.route('/explore', methods=['GET', 'POST'])
 @login_required
 def explore():
 	filterform = FilterForm()
