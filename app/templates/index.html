@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="page" id="index">
-<div class="row id="login">
+<div class="row" id="login">
 <div class="side">
     <h1>Hi, {{ current_user.first_name }}!</h1>
     {%  if form %}
@@ -32,26 +32,34 @@
     {% endif %}
 </div>
 <div class="main">
+	<div class="column"> 
     {% for project in list1 %}
-    <div class="column"> 
+    
         {% include '_post.html' %}
-    </div>
+    
     {% endfor %}
+	</div>
+	<div class="column"> 
     {% for project in list2 %}
-    <div class="column"> 
+    
         {% include '_post.html' %}
-    </div>
+    
     {% endfor %}
+	</div>
+	<div class="column"> 
     {% for project in list3 %}
-    <div class="column"> 
+    
         {% include '_post.html' %}
-    </div>
-    {% endfor %}    
+    
+    {% endfor %} 
+	</div>
+	<div class="column"> 
     {% for project in list4 %}
-    <div class="column"> 
+    
         {% include '_post.html' %}
-    </div>
+    
     {% endfor %}
+	</div>
 	</div>
 	</div>
 

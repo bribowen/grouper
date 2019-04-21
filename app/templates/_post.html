@@ -1,5 +1,8 @@
-<div class="post">  
-    <a href="{{ url_for('user', uin=project.original_poster) }}"> {{ project.get_poster(project.original_poster).first_name }} </a>
-        says:<br>{{ project.project_description }}<br>
-    <a href="{{ url_for('project', project_id=project.project_id) }}">See More</a>
+<div class="post">
+	{% set rand = range(1,12) | random %}
+	{% set p = "images/banner" ~ rand ~ ".jpg" %}
+	<div class="banner"><img src="{{ url_for('static', filename=p) }}" alt="project banner"/></div>
+    <div class="description"><a href="{{ url_for('user', uin=project.original_poster) }}"> {{ project.get_poster(project.original_poster).first_name }}'s:</a><br>
+        <br><h3>{{ project.project_name }}</h3><br><br>
+    <a href="{{ url_for('project', project_id=project.project_id) }}" class="button">See More</a></div>
     </div>
