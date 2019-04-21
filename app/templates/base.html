@@ -18,8 +18,8 @@
                     {% if current_user.is_authenticated %}
                     <a href="{{ url_for('index') }}" class="link">Home</a>
                     <a href="{{ url_for ('user', uin=current_user.uin) }}" class="link">Profile</a>
-                    <a href="{{ url_for('logout') }}" class="link">Logout</a>
                     <a href="{{ url_for('explore') }}" class="link">Explore</a>
+					<a href="{{ url_for('logout') }}" class="link">Logout</a>
                     {% endif %}
 				
             </nav>

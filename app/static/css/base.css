@@ -11,8 +11,8 @@ body {
 /* Style the top navigation bar */
 .navbar {
   display: flex;
-  color: #0A1200;
-  background: rgba(248, 248, 255, 0.6);
+  color: #F8F8FF;
+  background: #0A1200;
   overflow: hidden;
   position: fixed;
   z-index: 1000;
@@ -31,7 +31,7 @@ body {
 	font-size: 3.5em;
 	margin: 71px 0 0 -58px;
 	padding: none;
-	color: #0A1200;
+	color: #F8F8FF;
 	text-decoration: none;
 }
 .clearfix {
@@ -50,7 +50,7 @@ body {
 
 /* Style the navigation bar links */
 .navbar a.link {
-  color: #0A1200;
+  color: #F8F8FF;
   padding: 71px 80px;
   font-size: 1.7em;
   text-decoration: none;
@@ -62,8 +62,8 @@ body {
 
 /* Change color on hover */
 .navbar a.link:hover {
-  background-color: #0A1200;
-  color: #F8F8FF;
+  color: #0A1200;
+  background-color: #F8F8FF;
 }
 
 /* Column container */
@@ -144,6 +144,7 @@ body {
 }
 #interest_skill{
 	text-align: left !important;
+	padding: 0 0 0 130px;
 	
 }
 /* Footer */
@@ -151,7 +152,7 @@ body {
   display: flex;
   justify-content: right;
   padding: 21px 40px;
-  background: rgba(10, 18, 0, 0.8);
+  background: rgba(10, 18, 0, 1);
   flex-wrap: wrap;
   color: #F8F8FF;
 }
