@@ -2,40 +2,36 @@
 
 {% block content %}
 <div class="page" id="edit_profile">
-<div class="row">
+<div class="row1">
 <div class="main">
-    <h1>Edit Profile</h1>
+    <h1>Edit Profile</h1><br>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=50) }}<br>
+            {{ form.email(class="textbox", placeholder="Enter Email", size=50) }}<br>
             {% for error in form.email.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.fname.label }}<br>
-            {{ form.fname(size=50) }}<br>
+            {{ form.fname(class="textbox", placeholder="First Name", size=50) }}<br>
             {% for error in form.fname.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.lname.label }}<br>
-            {{ form.lname(size=50) }}<br>
+            {{ form.lname(class="textbox", placeholder="Last Name", size=50) }}<br>
             {% for error in form.lname.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.persona.label }}<br>
-            {{ form.persona }}<br>
+            {{ form.persona(class="textbox", placeholder="Student/Instructor") }}<br>
             {% for error in form.persona.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p><br>
-
+		<div id="interest_skill">
         <p>Interests:</p>
         <p>{{ form.marketing() }} {{ form.marketing.label }}</p>
         <p>{{ form.art() }} {{ form.art.label }}</p>
@@ -53,14 +49,14 @@
         <p>{{ form.document() }} {{ form.document.label }}</p>
         <p>{{ form.presentation() }} {{ form.presentation.label }}</p>
         <p>{{ form.web() }} {{ form.web.label }}</p><br>
+		</div>
         <p>
-            {{ form.about_me.label }}<br>
-            {{ form.about_me(size=50) }}<br>
+            {{ form.about_me(class="textbox", placeholder="About Me", size=50) }}<br>
             {% for error in form.about_me.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p>{{ form.submit(class="button") }}</p>
     </form>
 	</div>
 	</div>

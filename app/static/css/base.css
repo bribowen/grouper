@@ -16,8 +16,7 @@ body {
   color: #F8F8FF;
 /* Seting the background color */
   background: #0A1200;
-  overflow: hidden;
-/* Keeping the neavigation bar fixed while scrolling */
+/* Keeping the navigation bar fixed while scrolling */
   position: fixed;
   z-index: 1000;
   top: 0;
@@ -26,13 +25,16 @@ body {
 /* Defining margins for the conainer that holds the logo and the text "Grouper" */
 /* This also defines the borders that also act as a link to the home page */
 .home {
-  margin: 10px 550px 10px 70px;
+  margin: 10px 250px 10px 70px;
+}
+.logo {
+	float: left;
 }
 /* Grouper text */
 .heading {
 	float:left;
 	font-size: 3.5em;
-	margin: 71px 0 0 -58px;
+	margin: 71px 0 0 -62px;
 	padding: none;
 	color: #F8F8FF;
 	text-decoration: none;
@@ -41,41 +43,71 @@ body {
 .clearfix {
 	clear:both;
 }
-
-.tamu {
-	flex: 10%;
-	text-align: right;
+.dropdown {
+  position: absolute;
+  flex: 50%;
+  align-items:flex-start;
+  justify-content:right;
+  margin-bottom: 67px;
+  margin-top: 53px;
+  margin-right: 20px;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 1750px;
 }
-.footnote {
-	flex: 26%;
-	text-align: right;
-	font-size: 1.7em;
-}
 
-/* Style the navigation bar links */
-.navbar a.link {
+.dropdown-content {
+  visibility: hidden;
+  position: absolute;
+  background-color: #0A1200;
   color: #F8F8FF;
-  padding: 71px 80px;
+  margin-left: -100px;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  -webkit-transition: visibility 0.4s; /* For Safari 3.1 to 6.0 */
+  transition: visibility 0.4s;
+}
+/* Style the navigation bar links */
+.dropdown-content a {
+  color: #F8F8FF;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
   font-size: 1.7em;
   text-decoration: none;
   text-align: center;
-  /*display: block;*/
   -webkit-transition: color 0.4s, background-color 0.4s; /* For Safari 3.1 to 6.0 */
   transition: color 0.4s, background-color 0.4s;
 }
-
 /* Change color on hover */
-.navbar a.link:hover {
-  color: #0A1200;
-  background-color: #F8F8FF;
+.dropdown-content a:hover {
+	background-color: #F8F8FF;
+	color: #0A1200;
+}
+
+/* Styling the Texas A&M logo in the footer */
+.tamu {
+	/* Allowing the logo to flex upto 10% of the width of the footnote element */
+	flex: 10%;
+	text-align: right;
+}
+/* The text in the Footer */
+.footnote {
+	flex: 26%;
+	text-align: right;
+	/* Font size below is relative to the font size of the page content */
+	font-size: 1.7em;
 }
 
 /* Column container */
+/* row and row1 define styles for the entire width of the body (for different pages) */
 .row {  
-  width: 90%;
+  width: 95%;
   display: flex;
   margin: 250px auto 80px;
   border-radius: 25px;
+  /* To automatically adjust width when zooming in or transitioning to mobile  */
   flex-wrap: wrap;
   text-align:center;
   justify-content:center;
@@ -98,10 +130,11 @@ body {
 /* Create two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .side {
+	 /* (20% of row) */
   flex: 20%;
   background-color: #f1f1f1;
   padding: 20px 0;
-  margin-right: 10px;
+  margin-right: 20px;
   border-radius: 12px;
   align-items:flex-start;
   justify-content:center;
@@ -111,6 +144,7 @@ body {
 
 /* Main column */
 .main {
+	/* 75% of row*/
   flex: 75%;
   justify-content: center;
   background-color: #f1f1f1;
@@ -126,20 +160,22 @@ body {
 }
 /*input fields*/
 .input {
+	/* 1.7 times the font of the body */
 	font-size: 1.7em;
 }
-/*all texboxes*/
+/*all texboxes in forms*/
 .textbox {
   width: 80%;
   padding: 12px 20px;
   margin: 8px 10px;
   display: inline-block;
   border: 1px solid #ccc;
+   /* Border-radius makes text boxes and containers rounded */
   border-radius: 4px;
 }
 
+/* Styling buttons such as Submit and Log-In */
 .button {
-	/*background-color: #1D5CBD;*/
 	background: rgba(29, 92, 189, 1);
 	color: #F8F8FF;
 	width: 80%;
@@ -151,50 +187,108 @@ body {
 	-webkit-transition: background 0.1s; /* For Safari 3.1 to 6.0 */
 	transition: background 0.1s;
 }
+.delbutton {
+	background: #A81F11;
+	color: #F8F8FF;
+	width: 80%;
+	padding: 12px 20px;
+	margin: 8px 10px;
+    display: inline-block;
+	font-size: 1em;
+	opacity: 1;
+	-webkit-transition: background 0.1s; /* For Safari 3.1 to 6.0 */
+	transition: background 0.1s;
+}
+.linkbutton {
+	background: #0A1200;
+	color: #F8F8FF;
+	width: 10%;
+	padding: 20px 40px 20px 20px;
+	box-shadow: 1px 1px 5px #F8F8FF;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+    display: block;
+	font-size: 2em;
+	opacity: 1;
+	-webkit-transition: background 0.1s; /* For Safari 3.1 to 6.0 */
+	transition: background 0.1s;
+}
+
+/* Removing underlines and font-colors from links (here buttons) */
 a.button {
 	text-decoration: none;
 }
+
+/* Adding hovering effects to buttons */
 .button:hover {
 	background: #48A521;
 }
+
+/* Changing color of navigation links on hover */
+.linkbutton:hover 
+{
+	background: #48A521;
+}
+.delbutton:hover 
+{
+	background: #48A521;
+}
+/*Making nav links visible on hovering on the button*/
+.dropdown:hover .dropdown-content {
+  visibility:visible;
+}
+
+/* Styling the remember me option */
 #remember_me{
 	font-size: 0.5em;
 }
+
+/* Positioning the list of skills and interests in the profile page */
 #interest_skill{
 	text-align: left !important;
 	padding: 0 0 0 130px;
 	
 }
+
+/* Customizing the layout of the container that holds all the project posts */
 .column {
   flex: 25%;
   max-width: 25%;
   padding: 0 4px;
 }
 
+/* Designing the container encompassing the content of each post */
 .post{
 	background-color: #f1f1f1;
 	box-shadow: 0 5px 3px #0A1200;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-	margin: 8px 8px;
+	margin: 16px 8px;
 }
 
+/* Customizing layout for the container for images in each post */
 .banner{
 	width: 100%;
 	padding: 8px;
 	margin-bottom: 16px;
 }
 
+/* Adding style to the jinja element parsing the first name of the creator of a post */
 .description {
 	width: 100%;
 	margin: 16px 0;
 	padding: 8px;
 }
-.column img {
+.profile{
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 16px;
+}
+.post img {
   vertical-align: middle;
   width: 100%;
-  height: 150%;
 }
+
 /* Footer */
 .footer {
   display: flex;
@@ -211,6 +305,7 @@ a.button {
     flex-direction: column;
 	position: static;
   }
+  /* Formatting containers bases on media queries */
   .row1 {
 	width: 90%;
   }
@@ -222,9 +317,12 @@ a.button {
 	  max-width: 50%;
 	  max-height: 40%;
   }
+  .dropdown {
+	  padding-left: 950px;
+  }
 }
 h1 {
-	margin: 0 0 0 0;
+	margin: 0 10px 0 0;
 	font-size: 2.5em;
 	padding: 16 0 16 0;
 }

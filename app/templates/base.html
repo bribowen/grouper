@@ -13,16 +13,21 @@
     <body>
         <div class="header">
 		
-            <nav class="navbar"><a href="{{ url_for('index') }}" class="home"><div class="logo"><img src="{{ url_for('static', filename='images/blubby1.png') }}" alt="Blubby, the grouper" id="logo"/></div>
+            <div class="navbar"><a href="{{ url_for('index') }}" class="home"><div class="logo"><img src="{{ url_for('static', filename='images/blubby1.png') }}" alt="Blubby, the grouper" id="logo"/></div>
         <div class="heading"><strong>Grouper</strong></div><div class="clearfix"></div></a>
                     {% if current_user.is_authenticated %}
+					<div class="dropdown">
+					<button class="linkbutton">≡</button>
+					<div class="dropdown-content">
                     <a href="{{ url_for('index') }}" class="link">Home</a>
                     <a href="{{ url_for ('user', uin=current_user.uin) }}" class="link">Profile</a>
                     <a href="{{ url_for('explore') }}" class="link">Explore</a>
 					<a href="{{ url_for('logout') }}" class="link">Logout</a>
+					</div>
+					</div>
                     {% endif %}
 				
-            </nav>
+            </div>
             
 		
         </div>

@@ -93,7 +93,7 @@ def project(project_id):
     # Join form to allow the user to request to join the project.
     if current_user != project.get_poster(project.original_poster):
         joinform = JoinForm()
-        if form.validate_on_submit():
+        if joinform.validate_on_submit():
             # Checks to see if there is space on the project and the user isn't already listed on it.
             if check_number_users(project) and check_user(project, current_user):
                 proj_request = ProjectRequest(project_id=project.project_id, uin=current_user.uin,
@@ -298,7 +298,7 @@ def user(uin):
     # Gets a list of projects created by the user.
     projects = Project.query.filter_by(original_poster=user.uin).order_by(Project.timestamp.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
     return render_template('user.html', user=user, projects=projects.items, skills=skills,
-    interests=interests, form=form)
+    interests=interests)
 
 # Route to edit the user's profile. Found on the profile page.
 @app.route('/edit_profile', methods=['GET', 'POST'])

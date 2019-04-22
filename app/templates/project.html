@@ -2,19 +2,25 @@
 
 {% block content %}
 <div class="page" id="project">
-<div class="row">
+<div class="row1">
 <div class="main">
-    <h1> {{ project.project_name }} </h1>
-    <p> {{ project.project_description }} </p><br>
-    <p>Members:</p>
+<div class="post">
+{% set rand = range(1,29) | random %}
+{% set p = "images/banners/banner (" ~ rand ~ ").jpg" %}
+    <h1> {{ project.project_name }} </h1><br>
+	<div class="banner"><img src="{{ url_for('static', filename=p) }}" alt="project banner"/></div>
+    <div class="description"></h3>by <a href="{{ url_for('user', uin=project.original_poster) }}"> {{ project.get_poster(project.original_poster).first_name }}</a>
+    <br>{{ project.project_description }}<br>
+    <h2><br>Members:<br></h2>
     {% for member in members %}
-        <p>{{ member.first_name }} {{ member.last_name }}</p>
+        <h3>{{ member.first_name }} {{ member.last_name }}</h3>
     {% endfor %}
     {% if current_user.uin != project.original_poster %}
     <form action="" method="post">
         {{ joinform.hidden_tag() }}
-        <p>{{ joinform.join() }}</p>
+        <p>{{ joinform.join(class="button") }}</p>
     </form>
+	</div>
     {% endif %}
     {% if current_user.uin == project.original_poster %}
     <form action="" method="post">
@@ -40,14 +46,15 @@
             <p> {{ requests[4].requester_fname }} {{ requests[4].requester_lname }}</p><br>
             {{ requestform.accept5() }} {{ requestform.accept5.label }} {{ requestform.deny5() }} {{ requestform.deny5.label }}<br>
             {% endif %}
-        <p>{{ requestform.submit() }}</p>
+        <p>{{ requestform.submit(class="button") }}</p>
         {% endif %}
     </form>
     <form action="" method="post">
         {{ deleteform.hidden_tag() }}
-        <p>{{ deleteform.delete(class="button") }}</p>
+        <p>{{ deleteform.delete(class="delbutton") }}</p>
     </form>
     {% endif %}
+	</div>
 	</div>
 	</div>
 	</div>
