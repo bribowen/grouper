@@ -480,12 +480,11 @@ def submit_interest(form):
             if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, uin=current_user.uin).count() > 0):
                 interest = ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Science")[0].interest_id, 
                     uin=current_user.uin).first()
-            rem_interests.append(interest)
+                rem_interests.append(interest)
     if form.affairs.data:
         if current_user.is_authenticated:
             if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin).count() == 0):
-                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, 
-                    uin=current_user.uin)
+                interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id, uin=current_user.uin)
                 interests.append(interest)
         else:
             interest = ProfileInterest(interest_id=Interest.query.filter_by(interest_name="Student Affairs")[0].interest_id,
