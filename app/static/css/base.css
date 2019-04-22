@@ -25,7 +25,7 @@ body {
 /* Defining margins for the conainer that holds the logo and the text "Grouper" */
 /* This also defines the borders that also act as a link to the home page */
 .home {
-  margin: 10px 250px 10px 70px;
+  margin: 10px 10px;
 }
 .logo {
 	float: left;
@@ -318,7 +318,7 @@ a.button {
 	  max-height: 40%;
   }
   .dropdown {
-	  padding-left: 950px;
+	  padding-left: 350px;
   }
 }
 h1 {
