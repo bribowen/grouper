@@ -12,7 +12,7 @@ import MySQLdb
 
 # Importing of classes from the application.
 from app import app, db
-from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm, FilterForm#, DeleteForm
+from app.forms import JoinForm, ProjectForm, LoginForm, RegistrationForm, EditProfileForm, RequestForm, FilterForm, DeleteForm
 from app.models import Participation, Profile, Project, ProfileSkill, ProfileInterest, Skill, Interest, ProjectRequest
 
 # Provides a cursor for use with direct database queries.
@@ -114,6 +114,7 @@ def project(project_id):
         # Invokes the get_requests method to retrieve all requests for the project.
         requests = get_requests(current_user, project)
         if requestform.validate_on_submit():
+            print('hi')
             # Series of conditionals that checks to see which accept/deny boxes contain data and to act appropriately.
             # As an example, this first one will check if the accept box contained data. If so, it adds the user who created the requests
             # to the project.

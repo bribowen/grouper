@@ -123,7 +123,6 @@ class RequestForm(FlaskForm):
     accept5 = BooleanField('Accept')
     deny5 = BooleanField('Deny')
     submit = SubmitField('Submit')
-    delete = SubmitField('Delete Project')
 
 class FilterForm(FlaskForm):
     choices=[('Application Development', 'Application Development'),
@@ -134,5 +133,5 @@ class FilterForm(FlaskForm):
     project_type = SelectField('Project Type', choices=choices)
     filter = SubmitField('Filter Projects')
 
-"""class DeleteForm(FlaskForm):
-    delete = SubmitField('Delete Project')"""
+class DeleteForm(FlaskForm):
+    delete = SubmitField('Delete Project')
