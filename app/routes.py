@@ -113,67 +113,65 @@ def project(project_id):
     else:
         # Invokes the get_requests method to retrieve all requests for the project.
         requests = get_requests(current_user, project)
-        if requestform.validate_on_submit():
+        if requestform.validate_on_submit() and requestform.submit.data:
             print('hi')
             # Series of conditionals that checks to see which accept/deny boxes contain data and to act appropriately.
             # As an example, this first one will check if the accept box contained data. If so, it adds the user who created the requests
             # to the project.
-            if requestform.submit.data:
-                if requestform.accept1.data and requests[0]:
-                    proj_req = requests[0]
-                    participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
-                    print(participation.project_id)
-                    db.session.add(participation)
-                    db.session.delete(proj_req)
-                elif requestform.deny1.data and requests[0]:
-                    db.session.delete(requests[0])
-                if requestform.accept2.data and requests[1]:
-                    proj_req = requests[1]
-                    participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
-                    db.session.add(participation)
-                    db.session.delete(proj_req)
-                elif requestform.deny1.data and requests[1]:
-                    db.session.delete(requests[1])
-                if requestform.accept3.data and requests[2]:
-                    proj_req = requests[2]
-                    participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
-                    db.session.add(participation)
-                    db.session.delete(proj_req)
-                elif requestform.deny1.data and requests[2]:
-                    db.session.delete(requests[2])
-                if requestform.accept4.data and requests[3]:
-                    proj_req = requests[3]
-                    participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
-                    db.session.add(participation)
-                    db.session.delete(proj_req)
-                elif requestform.deny1.data and requests[3]:
-                    db.session.delete(requests[3])
-                if requestform.accept5.data and requests[4]:
-                    proj_req = requests[4]
-                    participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
-                    db.session.add(participation)
-                    db.session.delete(proj_req)
-                elif requestform.deny1.data and requests[4]:
-                    db.session.delete(requests[4])
-                # With all changes made, it commits the changes to the database, flashes a message to the user, and returns a redirect to the 
-                # URL of the same project page (refreshes, essentially
-                db.session.commit()
-                flash("Changes successfully made.")
-                return redirect(url_for('project', project_id=project.project_id))
+            if requestform.accept1.data and requests[0]:
+                proj_req = requests[0]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                print(participation.project_id)
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif requestform.deny1.data and requests[0]:
+                db.session.delete(requests[0])
+            if requestform.accept2.data and requests[1]:
+                proj_req = requests[1]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif requestform.deny2.data and requests[1]:
+                db.session.delete(requests[1])
+            if requestform.accept3.data and requests[2]:
+                proj_req = requests[2]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif requestform.deny3.data and requests[2]:
+                db.session.delete(requests[2])
+            if requestform.accept4.data and requests[3]:
+                proj_req = requests[3]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif requestform.deny4.data and requests[3]:
+                db.session.delete(requests[3])
+            if requestform.accept5.data and requests[4]:
+                proj_req = requests[4]
+                participation = Participation(project_id=project.project_id, member_id=proj_req.uin, role="Member")
+                db.session.add(participation)
+                db.session.delete(proj_req)
+            elif requestform.deny5.data and requests[4]:
+                db.session.delete(requests[4])
+            # With all changes made, it commits the changes to the database, flashes a message to the user, and returns a redirect to the 
+            # URL of the same project page (refreshes, essentially
+            db.session.commit()
+            flash("Changes successfully made.")
+            return redirect(url_for('project', project_id=project.project_id))
         # Checks to see if the owner wants to delete the project. If so, it removes the participants from the project then deletes the project.
-        if deleteform.validate_on_submit():
-            if deleteform.delete.data:
-                participations = Participation.query.filter_by(project_id=project.project_id).all()
-                proj_requests = ProjectRequest.query.filter_by(project_id=project.project_id).all()
-                for participation in participations:
-                    db.session.delete(participation)
-                for request in proj_requests:
-                    db.session.delete(request)
-                db.session.commit()
-                db.session.delete(project)
-                db.session.commit()
-                flash("Project deleted.")
-                return redirect(url_for('index'))
+        elif deleteform.validate_on_submit() and deleteform.delete.data:
+            participations = Participation.query.filter_by(project_id=project.project_id).all()
+            proj_requests = ProjectRequest.query.filter_by(project_id=project.project_id).all()
+            for participation in participations:
+                db.session.delete(participation)
+            for request in proj_requests:
+                db.session.delete(request)
+            db.session.commit()
+            db.session.delete(project)
+            db.session.commit()
+            flash("Project deleted.")
+            return redirect(url_for('index'))
     # Renders the project page with the appropriate form, list of members on the project, the project itself, and requests to join the project.
     return render_template('project.html', title='Project', requestform=requestform, joinform=joinform, deleteform=deleteform, members=members, project=project, requests=requests)
 

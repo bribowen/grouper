@@ -106,12 +106,6 @@ class JoinForm(FlaskForm):
 class RequestForm(FlaskForm):
     choices=[('Accept', 'Accept'), ('Deny', 'Deny')]
 
-    request1 = RadioField('', choices=choices)
-    request2 = RadioField('', choices=choices)
-    request3 = RadioField('', choices=choices)
-    request4 = RadioField('', choices=choices)
-    request5 = RadioField('', choices=choices)
-
     accept1 = BooleanField('Accept')
     deny1 = BooleanField('Deny')
     accept2 = BooleanField('Accept')
