@@ -158,6 +158,7 @@ def project(project_id):
             db.session.commit()
             flash("Changes successfully made.")
             return redirect(url_for('project', project_id=project.project_id))
+        # Checks to see if the owner wants to delete the project. If so, it removes the participants from the project then deletes the project.
         if deleteform.validate_on_submit():
             participations = Participation.query.filter_by(project_id=project.project_id).all()
             for participation in participations:
@@ -170,12 +171,16 @@ def project(project_id):
     # Renders the project page with the appropriate form, list of members on the project, the project itself, and requests to join the project.
     return render_template('project.html', title='Project', requestform=requestform, joinform=joinform, deleteform=deleteform, members=members, project=project, requests=requests)
 
+# Renders the explore page. Requires login.
 @app.route('/explore', methods=['GET', 'POST'])
 @login_required
 def explore():
+    # Creates the form for filtering.
 	filterform = FilterForm()
 	page = request.args.get('page', 1, type=int)
+    # Gets the list of projects.
 	projects = Project.query.order_by(Project.timestamp.desc()).all()
+    # Checks if the form has been submitted and, if so, gets the list of projects associated with the filtered type.
 	if filterform.validate_on_submit():
 		filter = filterform.project_type.data
 		projects = Project.query.filter_by(project_type=filter).all()
@@ -194,34 +199,47 @@ def explore():
 			list3.append(project)
 		elif (projects.index(project) % 4) == 3:
 			list4.append(project)
+    # Renders index.html. Does so because of the small difference between the index and explore pages. Renders the page without the project submission form.
 	return render_template('index.html', title='Explore', projects=projects, filterform=filterform, list1=list1, list2=list2, list3=list3, list4=list4)
 
+# Route for logging in. All pages redirect here if the user is not logged in.
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Checks if the user is authenticated. If so, redirects to the index page.
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+    # Creates the login form for submission.
     form = LoginForm()
     if form.validate_on_submit():
+        # Checks if the user exists in the database. If not, flashes a relevant message and returns the login page.
         user = Profile.query.filter_by(email_address=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
+        # Logs the user in and redirects to the index page.
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
+# Route for the register page. The login page links here.
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # Checks if the user is authenticated. If so, redirects to the index page.
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+    # Creates the registration form for submission.
     form = RegistrationForm()
     if form.validate_on_submit():
+        # Checks if UIN is an integer. If not, returns an error.
         if not type(form.uin.data) == int:
             flash('UIN must be an integer.')
             return redirect(url_for('register'))
+        # Creates the user object according to the inputted information.
         user = Profile(uin=form.uin.data, email_address=form.email.data, first_name=form.fname.data,
         last_name=form.lname.data, user_persona_type=form.persona.data, primary_contact=form.phone.data)
         user.set_password(form.password.data)
+        # 3 data validation chceks. One to ensure the UIN is not already in use, one to ensure the email is not already in use,
+        # and one to ensure the UIN is not too long.
         if user.check_uin(user.uin):
             flash('There is already a user registered with that UIN.')
             return redirect(url_for('register'))
@@ -231,15 +249,16 @@ def register():
         if user.check_uin_length(user.uin):
             flash('Please enter a UIN of 11 digits or less.')
             return redirect(url_for('register'))
+        # User is added to the database.
         db.session.add(user)
-        #Checking on interests
+        # Checking on submitted interests and adding them to the DB as necessary.
         interests, rem_interests = submit_interest(form)
         for interest in interests:
             db.session.add(interest)
         for interest in rem_interests:
             db.session.delete(interest)
 
-        #Checking on skills
+        # Checking on submitted interests and adding them to the DB as necessary.
         skills, rem_skills = submit_skill(form)
         for skill in skills:
             db.session.add(skill)
@@ -251,14 +270,17 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+# Route to log the user out.
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# Route to render the user's profile page. Requires a UIN as the second part of the URL for dynamically creating the page.
 @app.route('/user/<uin>')
 @login_required
 def user(uin):
+    # Gets the user as an object according to submitted UIN. Then gets all the user's skills and interests.
     user = Profile.query.filter_by(uin=uin).first_or_404()
     profileskills = ProfileSkill.query.filter_by(uin=uin).all()
     profileinterests = ProfileInterest.query.filter_by(uin=uin).all()
@@ -271,16 +293,18 @@ def user(uin):
         skill = Skill.query.filter_by(skill_id=result.skill_id).first()
         skills.append(skill)
     page = request.args.get('page', 1, type=int)
+    # Gets a list of projects created by the user.
     projects = Project.query.filter_by(original_poster=user.uin).order_by(Project.timestamp.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('explore', page=projects.next_num) if projects.has_next else None
-    prev_url = url_for('explore', page=projects.prev_num) if projects.has_prev else None
     return render_template('user.html', user=user, projects=projects.items, skills=skills,
-    interests=interests, next_url=next_url, prev_url=prev_url, form=form)
+    interests=interests, form=form)
 
+# Route to edit the user's profile. Found on the profile page.
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    # Form to hold and receive data changed/added by the user.
     form = EditProfileForm()
+    # If the form is submitted, it takes all the data and updates it in the database. This includes changed interests/skills.
     if form.validate_on_submit():
         current_user.email_address = form.email.data
         current_user.first_name = form.fname.data
@@ -304,7 +328,7 @@ def edit_profile():
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user', uin=current_user.uin))
-    
+    # If the HTTP sends a GET request, it returns info about the user.
     elif request.method == 'GET':
         form = get_skills(form)
         form = get_interests(form)
@@ -315,24 +339,30 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
+# Used before any request by the user. Sets the current user's last seen variable in the as the current time in UTC.
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
+# Function to check the number of users on a project and ensure it's not more than 5.
 def check_number_users(project):
     return (Participation.query.filter_by(project_id=project.project_id).count() < 5)
 
+# Function to check if the user is already on a project..
 def check_user(project, user):
     return (Participation.query.filter_by(project_id=project.project_id, member_id=user.uin).count() == 0) or (ProjectRequest.query.filter_by(project_id=project_id, uin=user.uin).count() == 0)
 
+# Function to get the requests to join a project.
 def get_requests(current_user, project):
     requests = []
     for item in ProjectRequest.query.filter_by(project_id=project.project_id):
         requests.append(item)
     return requests
 
+# Really terribly written function to get all of the interest changes submitted by a profile. Each interest is checked to see whether the user
+# already had it or not. Then it checks to see if that info was changed. It creates a list to add/remove from the database and returns both as a tuple.
 def submit_interest(form):
     interests = []
     rem_interests = []
@@ -466,6 +496,7 @@ def submit_interest(form):
     
     return interests, rem_interests
 
+# Same as the interest function above but with skills.
 def submit_skill(form):
     skills = []
     rem_skills = []
@@ -568,6 +599,7 @@ def submit_skill(form):
                 rem_skills.append(skill)
     return skills, rem_skills
 
+# Gets a list of skills associated with the profile and fills in the related form items.
 def get_skills(form):
     if (ProfileSkill.query.filter_by(skill_id=Skill.query.filter_by(skill_name="App Programming")[0].skill_id, uin=current_user.uin).count() > 0):
         form.app.data = True
@@ -589,6 +621,7 @@ def get_skills(form):
     
     return form
 
+# Same as the skill function above but with interests.
 def get_interests(form):
 
     if (ProfileInterest.query.filter_by(interest_id=Interest.query.filter_by(interest_name="Marketing")[0].interest_id, uin=current_user.uin).count() > 0):
