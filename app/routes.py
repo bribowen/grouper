@@ -89,13 +89,15 @@ def project(project_id):
         member = Profile.query.filter_by(uin=result.member_id).first()
         members.append(member)
     
-    # Checks to see if the user viewing the project is the project owner. If not, it renders the Join form to allow the user to request to join the project.
+    # Checks to see if the user viewing the project is the project owner. If not, it renders the
+    # Join form to allow the user to request to join the project.
     if current_user != project.get_poster(project.original_poster):
         joinform = JoinForm()
         if form.validate_on_submit():
             # Checks to see if there is space on the project and the user isn't already listed on it.
             if check_number_users(project) and check_user(project, current_user):
-                proj_request = ProjectRequest(project_id=project.project_id, uin=current_user.uin, requester_fname=current_user.first_name, requester_lname=current_user.last_name)
+                proj_request = ProjectRequest(project_id=project.project_id, uin=current_user.uin,
+                 requester_fname=current_user.first_name, requester_lname=current_user.last_name)
                 db.session.add(proj_request)
                 db.session.commit()
                 flash("The project owner will be notified of your request.")
