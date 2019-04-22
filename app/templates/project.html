@@ -24,8 +24,8 @@
     {% endif %}
     {% if current_user.uin == project.original_poster %}
     <form action="" method="post">
+        {{ requestform.hidden_tag() }}
         {% if requests[0] %}
-            {{ requestform.hidden_tag() }}
             {% if requests[0] %}
             <p> {{ requests[0].requester_fname }} </p><br>
             {{ requestform.accept1() }} {{ requestform.accept1.label }} {{ requestform.deny1() }} {{ requestform.deny1.label }}<br>
