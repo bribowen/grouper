@@ -28,17 +28,17 @@
                     {% endif %}
 				
             </div>
-            
+            </div>
 		
-        </div>
+        
         <!-- For info on flashed messages, see the routes.py file -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-            <ul>
+            <div class="flash">
                 {% for message in messages %}
-                <li>{{ message }}</li>
+                {{ message }}<br>
                 {% endfor %}
-            </ul>
+            </div>
             {% endif %}
         {% endwith %}
         <!-- DO NOT DELETE THIS. It allows the other pages to use these Jinja tags

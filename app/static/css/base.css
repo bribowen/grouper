@@ -18,7 +18,7 @@ body {
   background: #0A1200;
 /* Keeping the navigation bar fixed while scrolling */
   position: fixed;
-  z-index: 1000;
+  z-index: 1;
   top: 0;
   width: 100%;
 }
@@ -85,7 +85,19 @@ body {
 	background-color: #F8F8FF;
 	color: #0A1200;
 }
-
+/*To display flash messages under the header*/
+.flash {
+	background-color: #F8F8FF;
+	color: #A81F11;
+	font-size: 1.3em;
+	margin-top: 161px;
+	padding-left: 50px;
+	position: fixed;
+	display: inline-block;
+	z-index: 2;
+	top: 0;
+	width: 100%;
+}
 /* Styling the Texas A&M logo in the footer */
 .tamu {
 	/* Allowing the logo to flex upto 10% of the width of the footnote element */
@@ -322,6 +334,9 @@ a.button {
   }
   .heading{
 	  font-size: 3.0em;
+  }
+  h1 {
+	  font-size: 1.4em;
   }
 }
 h1 {
