@@ -41,17 +41,17 @@ class Profile(UserMixin, db.Model):
     	return '<User {}>'.format(self.first_name)
     
     def check_uin(self, uin):
-        if Profile.query.filter_by(uin=uin):
+        if Profile.query.filter_by(uin=uin).first():
             return True
         return False
     
     def check_uin_length(self, uin):
-        if len(uin) > 11:
+        if len(str(uin)) > 11:
             return True
         return False
     
-    def check_email(self, email):
-        if Profile.query.filter_by(email=email):
+    def check_email(self, email_address):
+        if Profile.query.filter_by(email_address=email_address).first():
             return True
         return False
     

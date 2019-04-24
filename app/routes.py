@@ -247,7 +247,7 @@ def register():
         if user.check_uin(user.uin):
             flash('There is already a user registered with that UIN.')
             return redirect(url_for('register'))
-        elif user.check_email(user.email):
+        elif user.check_email(user.email_address):
             flash('There is already a user registered with that email.')
             return redirect(url_for('register'))
         if user.check_uin_length(user.uin):
